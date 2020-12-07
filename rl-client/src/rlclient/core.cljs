@@ -5,37 +5,45 @@
             [rlclient.network.connect :as s]
             [rlclient.network.session :as r]
             [rlclient.graphics.sheets :as sh]
-            [rlclient.graphics.tilemap :as tm]))
+            [rlclient.graphics.wall :as w]
+            [rlclient.graphics.floor :as f]
+            [rlclient.graphics.sheets :as sh]
+            ))
 
 (defn setup []
-  (s/connect-socket)
+  (s/connect-socket!)
   (sh/fetch-tileset)
   (sh/fetch-animations)
   (q/color-mode :hsb 1.0)
-  (q/frame-rate 10))
+  (q/frame-rate 8))
 
 
 (defn update-state [state]
-  (sh/slice-tileset))
+  (sh/slice-tileset)
+  (w/cache-walls :castle)
+  (f/cache-floors :castle))
 
 (defn draw-state [state]
   (when-not (or (nil? @sh/tiles) (nil? @sh/animations))
     (let [state @s/remote-state]
       (q/background 128)
 
-      (doseq [i (range 0 24)
-              j (range 0 24)]
-        (sh/draw-at (tm/get-walltile) [i j]))
+      ;walls
+      (doseq [[pos tile] @w/wallmap]
+        (sh/draw-at (sh/get-tile tile) pos))
 
-      (doseq [x (:open state)]
-        (sh/draw-at (tm/get-floortile x) x))
+      ;floors
+      (doseq [[pos tile] @f/floormap]
+        (sh/draw-at (sh/get-tile tile) pos))
 
+      ;entities
       (doseq [k (keys (:animated state))]
-        (sh/draw-at (sh/get-animation (get (:animated state) k))
+        (sh/draw-at (sh/get-animation (get (:animated state) k) (hash k))
                     (get (:pos state) k)))
 
       (q/fill 1.0)
       (q/text (str "Player: " (r/player-id)) 10 20)
+      (q/text (str "Tic: " (:tic state)) 10 40)
       )))
 
 (defn ^:export run-sketch []

@@ -1,7 +1,8 @@
 (ns rlclient.input
   (:require [quil.core :as q]
-            [rlclient.network.connect :refer [send]]
-            [rlclient.network.session :refer [swap-player!]]))
+            [rlclient.network.connect :refer [send!]]
+            [rlclient.network.session :refer [cycle-pid!]]
+            [rlclient.network.connect :as c]))
 
 (def coded-keys {32 :space
                  8  :back
@@ -10,10 +11,15 @@
 
 (defn commit! [action]
   (println (str "action " action))
-  (send (str "action " action)))
+  (send! (str "action " action)))
 
 (defn reset! []
-  (send "reset"))
+  (send! "reset"))
+
+(defn swap-player! []
+  (cycle-pid!)
+  (c/send! "disconnect")
+  (c/connect-socket!))
 
 (def actions {:w     [:move :up]
               :a     [:move :left]

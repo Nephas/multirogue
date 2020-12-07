@@ -1,5 +1,5 @@
 (ns rlserver.system.update
-  (:require [rlserver.state :refer [init-state serialize-game store]]
+  (:require [rlserver.state :refer [serialize-game game-store]]
             [rlserver.system.npc :refer [update-npcs]]))
 
 (defn update-time [game]
@@ -11,5 +11,5 @@
       (update id update-npcs)))
 
 (defn update [id broadcaster]
-  (do (swap! store update-game id)
+  (do (swap! game-store update-game id)
       (broadcaster id (serialize-game id))))

@@ -26,6 +26,6 @@
 
             (str/includes? msg "action")
             (let [action (read-string (last (str/split msg #"action")))]
-              (do (swap! s/store update gid r/reduce action pid)
-                  (println "\t * state tic:" (get-in @s/store [gid :tic]))
+              (do (swap! s/game-store update gid r/reduce action pid)
+                  (println "\t * state tic:" (get-in @s/game-store [gid :tic]))
                   (broadcast gid (s/serialize-game gid)))))))
