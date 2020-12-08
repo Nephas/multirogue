@@ -20,9 +20,14 @@
                (= [:left-down] open-dirs) [:wall :vertical-left]
                (= [:left-up] open-dirs) [:wall :inner-corner :left-up]
 
+               (includes-all? [:up :left :right] open-dirs) [:wall :solid]
+               (includes-all? [:up :down] open-dirs) [:wall :horizontal]
+
                ;outer corners
                (includes-all? [:right :right-up :up] open-dirs) [:wall :outer-corner :right-up]
                (includes-all? [:left :left-up :up] open-dirs) [:wall :outer-corner :left-up]
+               (includes-all? [:right-down :right-up :up] open-dirs) [:wall :outer-corner :right-up]
+               (includes-all? [:left-down :left-up :up] open-dirs) [:wall :outer-corner :left-up]
 
                ;straight walls
                (includes? :up open-dirs) [:wall :horizontal]

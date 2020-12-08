@@ -1,9 +1,16 @@
 (ns rlserver.generate.npc
-  (:require [rlserver.generate.entity :refer [generate-entity new-id]]))
+  (:require [rlserver.entity.entity :refer [create-entity]]))
 
-(defn generate-npc [state pos]
-  (let [id (new-id)]
-    (-> state
-        (generate-entity id pos true)
-        (update :npc conj id)
-        (assoc-in [:animated id] 2))))
+(defn generate-bat [state pos]
+  (create-entity state
+                 {:pos      pos
+                  :hp       [1 1]
+                  :animated 2}
+                 [:npc :blocking]))
+
+(defn generate-skeleton [state pos]
+  (create-entity state
+                 {:pos      pos
+                  :hp       [3 3]
+                  :animated 3}
+                 [:npc :blocking]))

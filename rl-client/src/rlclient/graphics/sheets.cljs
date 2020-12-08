@@ -1,8 +1,6 @@
 (ns rlclient.graphics.sheets
-  (:require [quil.core :as q :include-macros true]))
-
-(def SIZE 8)
-(def SCALE 3)
+  (:require [quil.core :as q :include-macros true]
+            [rlclient.graphics.camera :refer [SIZE SCALE]]))
 
 (def origin (. (. js/document -location) -origin))
 (def tilesheet (atom nil))
@@ -17,10 +15,7 @@
 
 (defn get-animation [n seed]
   (let [fr (mod (+ seed (q/frame-count)) 5)]
-    (nth @animations (+ n (* fr 4)))))
-
-(defn draw-at [img [x y]]
-  (q/image img (* SCALE SIZE x) (* SCALE SIZE y)))
+    (nth @animations (+ n (* fr 5)))))
 
 (defn slice [sheet cols rows]
   (for [x (range cols)
@@ -36,7 +31,7 @@
     (reset! tiles (slice @tilesheet 32 24)))
   (when (nil? @animations)
     (print "slicing animations")
-    (reset! animations (slice @animationsheet 10 4))))
+    (reset! animations (slice @animationsheet 10 5))))
 
 (defn fetch-tileset []
   (reset! tilesheet (q/load-image (str origin "/img/tileset.png"))))

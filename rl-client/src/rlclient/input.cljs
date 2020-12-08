@@ -9,11 +9,11 @@
                  9  :tab
                  10 :enter})
 
-(defn commit! [action]
+(defn send-commit! [action]
   (println (str "action " action))
   (send! (str "action " action)))
 
-(defn reset! []
+(defn send-reset! []
   (send! "reset"))
 
 (defn swap-player! []
@@ -33,11 +33,20 @@
               :t     [:pass nil]
               :space [:attack nil]})
 
-(defn handle-key [state event]
+(def current-key (atom nil))
+
+(defn handle-key [key]
+  (cond (= key :r) (send-reset!)
+        (= key :Dead) (swap-player!)
+        (contains? actions key) (send-commit! (get actions key))))
+
+(defn handle-event [state event]
   (let [coded-key (get coded-keys (q/key-code))
         key (if (some? coded-key) coded-key (:key event))]
-    (do (println "keypress: " (q/key-code) " - " (:key event))
-        (cond (= key :r) (reset!)
-              (= key :Dead) (swap-player!)
-              (contains? actions key) (commit! (get actions key)))
+    (do (reset! current-key {:key key :time (q/frame-count)})
+        (handle-key key)
         state)))
+
+(defn refire-key []
+  (when (and (q/key-pressed?) (zero? (mod (- (q/frame-count) (:time @current-key)) 3)))
+    (handle-key (:key @current-key))))

@@ -18,5 +18,5 @@
         target (move origin direction)]
     (open? state target)))
 
-(defn move-entity [state id dir]
+(defn entity-move [state id dir]
   (update-in state [:pos id] move dir))

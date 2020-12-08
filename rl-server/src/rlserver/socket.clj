@@ -1,6 +1,6 @@
 (ns rlserver.socket
   (:require [clojure.string :as str]
-            [rlserver.state :as s]
+            [rlserver.entity.state :as s]
             [rlserver.loop :as l]
             [rlserver.reducer.reduce :as r]
             [org.httpkit.server :as http]))
