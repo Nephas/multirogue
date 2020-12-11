@@ -5,6 +5,7 @@
             [rlclient.network.connect :as s]
             [rlclient.network.session :as r]
             [rlclient.graphics.sheets :as sh]
+            [rlclient.graphics.gui.bar :as b]
             [rlclient.graphics.camera :as c]
             [rlclient.graphics.wall :as w]
             [rlclient.graphics.floor :as f]
@@ -48,14 +49,20 @@
         (c/draw-at (sh/get-animation animation (hash id))
                     (get (:pos state) id)))
 
-      ;animations
-      (doseq [[id animation] (:effect state)]
-        (c/draw-at (sh/get-animation animation (hash id))
+      ;effect
+      (doseq [[id effect] (:effect state)]
+        (c/draw-at (sh/get-animation effect (hash id))
                     (get (:pos state) id)))
 
+      (q/fill 0)
+      (q/rect 0 0 175 175)
       (q/fill 1.0)
-      (q/text (str "Player: " (r/player-id)) 10 20)
-      (q/text (str "Tic: " (:tic state)) 10 40)
+      (q/text-size 20)
+      (q/text (str "Player: " (r/player-id)) 10 120)
+      (q/text (str "Tic: " (:tic state)) 10 150)
+
+      (b/red-bar [1 1] (get-in state [:hp (r/player-id)]))
+      (b/green-bar [1 2] (get-in state [:ap (r/player-id)]))
       )))
 
 (defn ^:export run-sketch []

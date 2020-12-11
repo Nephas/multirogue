@@ -1,5 +1,6 @@
 (ns rlserver.reducer.reduce
-  (:require [rlserver.reducer.move :refer [entity-move moveable?]]
+  (:require [rlserver.system.action :refer [active?]]
+            [rlserver.reducer.move :refer [entity-move moveable?]]
             [rlserver.reducer.attack :refer [entity-attack]]))
 
 (defn reduce [state action pid]
@@ -8,8 +9,13 @@
           state
 
           (= :move primary)
-          (if (moveable? state secondary pid)
+          (if (and (moveable? state secondary pid) (active? state pid))
             (entity-move state pid secondary)
-            (entity-attack state pid secondary))
+            state)
+
+          (= :attack primary)
+          (if (active? state pid)
+            (entity-attack state pid secondary)
+            state)
 
           true state)))

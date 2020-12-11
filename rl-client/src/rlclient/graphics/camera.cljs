@@ -1,6 +1,6 @@
 (ns rlclient.graphics.camera
   (:require [quil.core :as q]
-            [rlclient.graphics.vector :refer [add sub scalar]]
+            [rllib.vector :refer [add sub scalar]]
             [rlclient.network.connect :as s]
             [rlclient.network.session :as r]))
 
@@ -13,6 +13,10 @@
 
 (defn draw-at [img pos]
   (let [[x y] (scalar (* SCALE SIZE) (add pos @camera))]
+    (q/image img x y)))
+
+(defn draw-fixed [img pos]
+  (let [[x y] (scalar (* SCALE SIZE) pos)]
     (q/image img x y)))
 
 (defn update-camera []

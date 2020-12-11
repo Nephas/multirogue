@@ -1,5 +1,6 @@
 (ns rlserver.reducer.attack
-  (:require [rlserver.reducer.move :refer [move]]
+  (:require [rlserver.system.action :refer [spend-ap]]
+            [rlserver.reducer.move :refer [move]]
             [rlserver.generate.effect :refer [generate-effect]]))
 
 (defn get-entities-at [state target-pos]
@@ -9,11 +10,14 @@
 
 (defn damage [state target-pos dam]
   (let [id (first (get-entities-at state target-pos))]
-    (-> state (update-in [:hp id 0] - dam))))
+    (if (some? (get-in state [:hp id]))
+      (update-in state [:hp id 0] - dam)
+      state)))
 
 (defn entity-attack [state id dir]
   (let [pos (get-in state [:pos id])
         target-pos (move pos dir)]
     (-> state
         (generate-effect target-pos 4)
-        (damage target-pos 2))))
+        (damage target-pos 2)
+        (spend-ap id 2))))

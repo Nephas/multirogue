@@ -1,6 +1,5 @@
 (ns rlclient.graphics.floor
-  (:require [rlclient.graphics.sheets :as t]
-            [rlclient.graphics.tilemap :as tm]
+  (:require [rlclient.graphics.tilemap :as tm]
             [rlclient.network.connect :refer [remote-state]]))
 
 (def floormap (atom nil))

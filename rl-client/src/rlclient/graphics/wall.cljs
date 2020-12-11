@@ -1,6 +1,7 @@
 (ns rlclient.graphics.wall
   (:require [clojure.set :as set]
             [rlclient.graphics.tilemap :as tm]
+            [rllib.math :refer [large-neighborhood]]
             [rlclient.network.connect :refer [remote-state]]))
 
 (def wallmap (atom nil))
@@ -40,18 +41,8 @@
                true [:wall :darkness])]
     (tm/rand-nth (get-in tm/tilemap path) seed)))
 
-(defn direct-neighborhood [[x y]]
-  {:right      [(inc x) y]
-   :right-down [(inc x) (inc y)]
-   :right-up   [(inc x) (dec y)]
-   :left       [(dec x) y]
-   :left-down  [(dec x) (inc y)]
-   :left-up    [(dec x) (dec y)]
-   :down       [x (inc y)]
-   :up         [x (dec y)]})
-
 (defn get-walltile [open-positions pos]
-  (let [neighbors (direct-neighborhood pos)
+  (let [neighbors (large-neighborhood pos)
         open-neighbors (set/intersection (set open-positions) (set (vals neighbors)))
         open-dirs (into [] (vals (select-keys (set/map-invert neighbors) open-neighbors)))]
     (get-wall-facing open-dirs pos)))

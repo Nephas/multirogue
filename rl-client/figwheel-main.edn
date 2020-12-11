@@ -1,1 +1,3 @@
-{:ring-handler rlclient.ring/handler}
+{:ring-handler rlclient.ring/handler
+ :target-dir "resources"
+ :load-warninged-code true}

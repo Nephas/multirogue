@@ -17,12 +17,20 @@
 (defn handle [msg channel gid pid]
   (do (println (log-header gid pid) msg)
       (cond (str/includes? msg "disconnect")
-            (l/stop-loop! gid)
+            (let [this? #(= % channel)]
+              (do (swap! channels update gid #(remove this? %))
+                  (println "\t * open channels:" (count (get @channels gid)))
+                  (when (empty? (get @channels gid))
+                    (println "\t * closing game")
+                    (l/destroy-game gid))))
 
             (str/includes? msg "connect")
             (do (swap! channels update gid conj channel)
-                (l/initialize-game gid broadcast)
-                (broadcast gid (str "connect player " pid)))
+                (println "\t * open channels:" (count (get @channels gid)))
+                (broadcast gid (str "connect player " pid))
+                (when (nil? (get @s/game-store gid))
+                  (println "\t * start new game")
+                  (l/initialize-game gid broadcast)))
 
             (str/includes? msg "action")
             (let [action (read-string (last (str/split msg #"action")))]

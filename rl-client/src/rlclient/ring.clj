@@ -1,7 +1,9 @@
-(ns rlclient.ring)
+(ns rlclient.ring
+  (:require [compojure.core :refer [context defroutes GET ANY]]
+            [compojure.route :as route]))
 
-(defn handler [req]
-  (println req)
-  {:status 404
-   :headers {"Content-Type" "text/html"}
-   :body "Yep the server failed to find it."})
+(defroutes handler
+           (context "/game/:gid/player/:pid" [gid pid]
+             (route/resources "/")
+             (route/files "/img")
+             (route/files "/cljs-out")))

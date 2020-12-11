@@ -6,6 +6,8 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.10.312"]
                  [org.clojure/core.async "0.4.474"]
+                 [compojure "1.6.1"]
+                 [hiccup "1.0.5"]
                  [quil "3.1.0"]
                  [cljsjs/react-dom-server "15.3.1-0"]       ;; for sablono
                  [cljsjs/react-dom "15.3.1-0"]              ;; for sablono
@@ -19,5 +21,4 @@
   :profiles {:dev     {:dependencies [[com.bhauman/figwheel-main "0.1.5"]
                                       [com.bhauman/rebel-readline-cljs "0.1.4"]]}}
 
-  :aliases {"fig"       ["trampoline" "run" "-m" "figwheel.main"]
-            "fig:build" ["trampoline" "run" "-m" "figwheel.main" "-b" "rl" "-r"]})
+  :aliases {"rlclient" ["trampoline" "run" "-m" "figwheel.main" "-b" "rl" "-r"]})

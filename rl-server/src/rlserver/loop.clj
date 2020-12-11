@@ -8,7 +8,7 @@
 
 (defn start-loop! [id broadcaster]
   (if (nil? (get @timers id))
-    (let [timer (t/timer id)]
+    (let [timer (t/timer (str id))]
       (swap! timers assoc id timer)
       (t/run-task! #(u/update id broadcaster) :period 750 :by timer))))
 
@@ -17,6 +17,10 @@
   (swap! timers assoc id nil))
 
 (defn initialize-game [id broadcaster]
-  (let [state (gl/generate-level INITSTATE [48 48])]
-    (swap! game-store assoc id state)
-    (start-loop! id broadcaster)))
+    (let [state (gl/generate-level INITSTATE [48 48])]
+      (swap! game-store assoc id state)
+      (start-loop! id broadcaster)))
+
+(defn destroy-game [id]
+  (swap! game-store dissoc id)
+  (stop-loop! id))

@@ -1,5 +1,5 @@
 (ns rlclient.graphics.tilemap
-  (:require [rlclient.graphics.sheets :as t]))
+  (:require [rllib.vector :refer [add]]))
 
 (def tilemap
   {:floor [[1 0] [2 0] [3 0] [4 0]
@@ -21,9 +21,6 @@
 (defn rand-nth [coll seed]
   (get coll (mod seed (count coll))))
 
-(defn offset [[x1 y1] [x2 y2]]
-  [(+ x1 x2) (+ y1 y2)])
-
 (defn rect [[x1 y1] [x2 y2]]
   (for [x (range x1 x2) y (range y1 y2)] [x y]))
 
@@ -37,4 +34,4 @@
   (let [biome-offset {:castle [0 0]
                       :frost  [0 7]
                       :ruin   [0 14]}]
-    (offset pos (get biome-offset biome))))
+    (add pos (get biome-offset biome))))

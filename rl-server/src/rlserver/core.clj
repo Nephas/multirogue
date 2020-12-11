@@ -20,12 +20,10 @@
            (GET "/" [] (slurp (io/resource "index.html")))
            (context "/game/:gid/player/:pid" [gid pid]
              (GET "/" [] (slurp (io/resource "index.html")))
-             (GET "/ws" [] (ws-handler gid (Integer/parseInt pid)))))
+             (GET "/ws" [] (ws-handler (Integer/parseInt gid) (Integer/parseInt pid)))))
 
 
 (defn -main [& [port]]
   (let [port (Integer. (or port (env :port) 5000))]
     (println (str "backend - http://localhost:" port))
-    (println (str "frontend - http://localhost:3449"))
-
     (http/run-server routes {:port port})))

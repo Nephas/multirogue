@@ -21,17 +21,22 @@
   (c/send! "disconnect")
   (c/connect-socket!))
 
-(def actions {:w     [:move :up]
-              :a     [:move :left]
-              :s     [:move :down]
-              :d     [:move :right]
+(def actions {:w          [:move :up]
+              :a          [:move :left]
+              :s          [:move :down]
+              :d          [:move :right]
 
-              :1     [:item :1]
-              :2     [:item :2]
-              :3     [:item :3]
+              :ArrowUp    [:attack :up]
+              :ArrowLeft  [:attack :left]
+              :ArrowDown  [:attack :down]
+              :ArrowRight [:attack :right]
 
-              :t     [:pass nil]
-              :space [:attack nil]})
+              :1          [:item :1]
+              :2          [:item :2]
+              :3          [:item :3]
+
+              :t          [:pass nil]
+              :space      [:attack nil]})
 
 (def current-key (atom nil))
 
@@ -41,12 +46,12 @@
         (contains? actions key) (send-commit! (get actions key))))
 
 (defn handle-event [state event]
-  (let [coded-key (get coded-keys (q/key-code))
-        key (if (some? coded-key) coded-key (:key event))]
+  (let [key (q/key-as-keyword)]
+    (print key)
     (do (reset! current-key {:key key :time (q/frame-count)})
         (handle-key key)
         state)))
 
 (defn refire-key []
-  (when (and (q/key-pressed?) (zero? (mod (- (q/frame-count) (:time @current-key)) 3)))
+  (when (and (q/key-pressed?) (zero? (mod (- (q/frame-count) (:time @current-key)) 2)))
     (handle-key (:key @current-key))))

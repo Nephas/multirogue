@@ -13,11 +13,12 @@
    :animated {}
    :sprite   {}
    :hp       {}
+   :ap       {}
    :effect   {}})
 
 (def FLAGS
   {:blocking nil
-   :npc      nil})
+   :ai      nil})
 
 (def INITSTATE (merge MAP COMPONENTS FLAGS))
 

@@ -1,4 +1,5 @@
-(ns rlserver.reducer.move)
+(ns rlserver.reducer.move
+  (:require [rlserver.system.action :refer [active? spend-ap]]))
 
 (defn move [[x y] dir]
   (cond (= :up dir) [x (dec y)]
@@ -19,4 +20,6 @@
     (open? state target)))
 
 (defn entity-move [state id dir]
-  (update-in state [:pos id] move dir))
+  (-> state
+      (update-in [:pos id] move dir)
+      (spend-ap id 1)))
