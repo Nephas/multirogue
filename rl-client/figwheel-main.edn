@@ -1,3 +1,1 @@
-{:watch-dirs ["src" ]
- :css-dirs ["resources/public/css"]
- :ring-handler rlclient.ring/handler}
+{:ring-handler rlclient.ring/handler}
