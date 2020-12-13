@@ -1,24 +1,18 @@
 (ns rlserver.generate.level
-  (:require [rlserver.generate.npc :refer [generate-bat generate-skeleton]]
-            [rlserver.generate.object :refer [generate-stair-up generate-stair-down generate-corpse generate-blood]]
-            [rlserver.generate.pc :refer [generate-pc]]))
+  (:require
+    [rllib.board :refer [rect]]
+    [rllib.rand :refer [set-seed! uniform rand-n rand-coll new-seed]]
+    [rlserver.entity.state :refer [apply-seq apply-times]]
+    [rlserver.generate.npc :refer [generate-bat generate-skeleton]]
+    [rlserver.generate.object :refer [generate-stair-up generate-stair-down generate-corpse generate-potion]]
+    [rlserver.generate.pc :refer [generate-pc]]))
 
-(defn rand-range
-  [n1 n2] (+ n1 (rand-int (- n2 n1))))
-
-(defn rand-bool []
-  (zero? (rand-int 2)))
-
-(defn rect
-  ([[x1 y1] [x2 y2] m] (for [x (range (+ x1 m) (- x2 m)) y (range (+ y1 m) (- y2 m))] [x y]))
-  ([[x1 y1] [x2 y2]] (for [x (range x1 x2) y (range y1 y2)] [x y]))
-  ([[x y] w h m] (rect [x y] [(+ x w) (+ y h)] m)))
 
 (defn midpoint [[[x y] w h]]
   [(int (+ x (/ w 2))) (int (+ y (/ h 2)))])
 
 (defn bsp-partition [[[x y] w h]]
-  (let [rand-slice #(int (* % (rand-nth [2/3 3/5 2/5 1/3])))]
+  (let [rand-slice #(int (* % (rand-coll [2/3 3/5 2/5 1/3])))]
     (if (> w h) (let [w1 (rand-slice w)
                       w2 (- w w1)]
                   [[[x y] w1 h]
@@ -36,10 +30,16 @@
                                         (conj corridors [(midpoint (first remaining-rooms))
                                                          (midpoint (second remaining-rooms))])))))
 
+(defn generate-in-room [state room nmax generator]
+  (apply-times state nmax #(generator % (rand-coll room))))
+
+(defn generate-all [state rooms nmax generator]
+  (apply-seq state rooms #(generate-in-room %1 %2 nmax generator)))
+
 (defn generate-level [state lvlid]
+  (set-seed! lvlid)
   (let [[x y] [48 48]
         size [x y]
-        mapseed (rand-int 999999)
         t1-defs (->> [[1 1] (- x 2) (- y 2)]
                      (bsp-partition))
         t2-defs (->> t1-defs
@@ -58,19 +58,24 @@
                               (generate-corridors t4-defs))
 
         corridor-fields (map (fn [[p1 [x2 y2]]] (rect p1 [(inc x2) (inc y2)])) corridor-defs)
-        room-fields (map (fn [[[x y] w h]] (rect [x y] (dec w) (dec h) 1)) t4-defs)
+        room-fields (map (fn [[[x y] w h]] (rect [x y] w h 2)) t4-defs)
         rect-fields (concat corridor-fields room-fields)
-        ]
+
+        open-fields (distinct (apply concat rect-fields))]
     (-> state
         (assoc :level lvlid)
         (assoc :mapsize size)
-        (assoc :mapseed mapseed)
-        (assoc :open (distinct (apply concat rect-fields)))
-        (assoc :biome (rand-nth [:frost :castle :ruin]))
-        (generate-stair-up (rand-nth (first room-fields)) (dec lvlid))
-        (generate-stair-down (rand-nth (last room-fields)) (inc lvlid))
-        (generate-pc 0 (rand-nth (first room-fields)))
-        (generate-pc 1 (rand-nth (first room-fields)))
-        (generate-bat (rand-nth (second room-fields)))
-        (generate-bat (rand-nth (second room-fields)))
-        (generate-skeleton (rand-nth (nth room-fields 3))))))
+        (assoc :maphash (hash open-fields))
+        (assoc :open open-fields)
+        (assoc :biome (rand-coll [:frost :castle :ruin]))
+
+        (generate-stair-up (rand-coll (first room-fields)) (dec lvlid))
+        (generate-stair-down (rand-coll (last room-fields)) (inc lvlid))
+
+        (generate-pc 0 (rand-coll (first room-fields)))
+        (generate-pc 1 (rand-coll (first room-fields)))
+
+        (generate-all (rest room-fields) 2 generate-bat)
+        (generate-all (rest room-fields) 1 generate-skeleton)
+        (generate-all (rest room-fields) 1 generate-potion)
+        )))

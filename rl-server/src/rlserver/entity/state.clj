@@ -7,7 +7,7 @@
   {:tic     0
    :open    nil
    :mapsize nil
-   :mapseed 0
+   :maphash 0
    :biome   nil})
 
 (def COMPONENTS
@@ -34,3 +34,10 @@
     (if (nil? current) next-state
                        (recur remaining
                               (reducer next-state current)))))
+
+(defn apply-times [state n reducer]
+  (loop [current n
+         next-state state]
+    (if (zero? current) next-state
+                        (recur (dec current)
+                               (reducer next-state)))))

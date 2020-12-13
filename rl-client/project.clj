@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.10.312"]
                  [org.clojure/core.async "0.4.474"]
+                 [lein-cljsbuild "1.1.8"]
                  [compojure "1.6.1"]
                  [hiccup "1.0.5"]
                  [quil "3.1.0"]

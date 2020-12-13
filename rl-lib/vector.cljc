@@ -1,5 +1,7 @@
-(ns rllib.vector
-  (:require [rllib.board :refer [abs]]))
+(ns rllib.vector)
+
+(defn abs [x]
+  (if (neg? x) (- x) x))
 
 (defn add [v1 v2]
   (mapv + v1 v2))

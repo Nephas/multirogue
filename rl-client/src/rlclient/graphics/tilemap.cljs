@@ -21,9 +21,6 @@
 (defn rand-nth [coll seed]
   (get coll (mod seed (count coll))))
 
-(defn rect [[x1 y1] [x2 y2]]
-  (for [x (range x1 x2) y (range y1 y2)] [x y]))
-
 (defn cache-map [positions constructor]
   (->> positions
        (map (fn [pos] [pos (constructor pos)]))

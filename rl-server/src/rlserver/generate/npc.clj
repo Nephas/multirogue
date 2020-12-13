@@ -11,6 +11,6 @@
 (defn generate-skeleton [state pos]
   (create-entity state
                  {:pos      pos
-                  :hp       [3 3]
+                  :hp       [2 2]
                   :animated 3}
                  [:ai :blocking]))

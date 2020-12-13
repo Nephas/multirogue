@@ -1,10 +1,10 @@
 (ns rlclient.graphics.wall
   (:require [clojure.set :as set]
             [rlclient.graphics.tilemap :as tm]
-            [rllib.board :refer [large-neighborhood]]
+            [rllib.board :refer [large-neighborhood rect]]
             [rlclient.network.connect :refer [remote-state]]))
 
-(def wallmap (atom {:mapseed nil
+(def wallmap (atom {:maphash nil
                     :tiles   []}))
 
 (defn includes? [e arr]
@@ -49,15 +49,15 @@
     (get-wall-facing open-dirs pos)))
 
 (defn cache-walls []
-  (when (and (not (nil? @remote-state)) (not= (:mapseed @wallmap) (:mapseed @remote-state)))
+  (when (and (not (nil? @remote-state)) (not= (:maphash @wallmap) (:maphash @remote-state)))
     (let [{mapsize        :mapsize
            open-positions :open
            biome          :biome
-           mapseed        :mapseed} @remote-state
-          positions (tm/rect [0 0] mapsize)
+           maphash        :maphash} @remote-state
+          positions (rect [0 0] mapsize)
           wall-positions (set/difference (set positions) (set open-positions))
           cached-tiles (tm/cache-map wall-positions
                               #(tm/with-biome (get-walltile open-positions %) biome))]
       (reset! wallmap
-              {:mapseed mapseed
+              {:maphash maphash
                :tiles   cached-tiles}))))

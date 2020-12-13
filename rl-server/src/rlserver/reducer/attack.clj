@@ -20,4 +20,4 @@
     (-> state
         (generate-effect target-pos 4)
         (damage target-pos 1)
-        (spend-ap id 2))))
+        (spend-ap id 1))))
