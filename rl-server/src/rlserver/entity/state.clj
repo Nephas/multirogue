@@ -6,7 +6,9 @@
 (def MAP
   {:tic     0
    :open    nil
-   :mapsize nil})
+   :mapsize nil
+   :mapseed 0
+   :biome   nil})
 
 (def COMPONENTS
   {:pos      {}
@@ -17,8 +19,8 @@
    :effect   {}})
 
 (def FLAGS
-  {:blocking nil
-   :ai      nil})
+  {:blocking #{}
+   :ai       #{}})
 
 (def INITSTATE (merge MAP COMPONENTS FLAGS))
 

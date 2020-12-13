@@ -4,10 +4,14 @@
 
 (def floormap (atom nil))
 
-(defn cache-floors [biome]
-  (when (and (nil? @floormap) (not (nil? @remote-state)))
-    (let [{open-positions :open} @remote-state
-          floors (:floor tm/tilemap)]
+(defn cache-floors []
+  (when (and (not (nil? @remote-state)) (not= (:mapseed @floormap) (:mapseed @remote-state)))
+    (let [{open-positions :open
+           biome          :biome
+           mapseed        :mapseed} @remote-state
+          floors (:floor tm/tilemap)
+          cached-tiles (tm/cache-map open-positions
+                              #(tm/with-biome (tm/rand-nth floors (hash %)) biome))]
       (reset! floormap
-              (tm/cache-map open-positions
-                            #(tm/with-biome (tm/rand-nth floors (hash %)) biome))))))
+              {:mapseed mapseed
+               :tiles   cached-tiles}))))

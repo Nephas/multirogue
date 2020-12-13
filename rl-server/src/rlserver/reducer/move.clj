@@ -1,11 +1,6 @@
 (ns rlserver.reducer.move
-  (:require [rlserver.system.action :refer [active? spend-ap]]))
-
-(defn move [[x y] dir]
-  (cond (= :up dir) [x (dec y)]
-        (= :down dir) [x (inc y)]
-        (= :left dir) [(dec x) y]
-        (= :right dir) [(inc x) y]))
+  (:require [rlserver.system.action :refer [active? spend-ap]]
+            [rllib.board :refer [move]]))
 
 (defn open? [state pos]
   (let [open-pos (:open state)

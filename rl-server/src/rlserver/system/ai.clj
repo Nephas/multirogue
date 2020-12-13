@@ -1,8 +1,8 @@
 (ns rlserver.system.ai
   (:require
     [rllib.vector :refer [add man-dist]]
-    [rllib.math :refer [small-neighborhood]]
-    [rlserver.reducer.move :refer [moveable? entity-move move]]
+    [rllib.board :refer [small-neighborhood move]]
+    [rlserver.reducer.move :refer [moveable? entity-move]]
     [rlserver.reducer.attack :refer [entity-attack]]
     [rlserver.entity.state :refer [apply-seq]]))
 

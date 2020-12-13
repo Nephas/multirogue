@@ -38,6 +38,7 @@
 
 (defn generate-level [state size]
   (let [[x y] size
+        mapseed (rand-int 999999)
         t1-defs (->> [[1 1] (- x 2) (- y 2)]
                      (bsp-partition))
         t2-defs (->> t1-defs
@@ -61,7 +62,9 @@
         ]
     (-> state
         (assoc :mapsize size)
+        (assoc :mapseed mapseed)
         (assoc :open (distinct (apply concat rect-fields)))
+        (assoc :biome (rand-nth [:frost :castle :ruin]))
         (generate-stair-down (rand-nth (last room-fields)))
         (generate-stair-up (rand-nth (first room-fields)))
         (generate-pc 0 (rand-nth (first room-fields)))

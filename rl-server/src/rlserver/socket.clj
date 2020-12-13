@@ -24,6 +24,11 @@
                     (println "\t * closing game")
                     (l/destroy-game gid))))
 
+            (str/includes? msg "reset")
+            (do (println "\t * reset level")
+                (l/destroy-game gid)
+                (l/initialize-game gid broadcast))
+
             (str/includes? msg "connect")
             (do (swap! channels update gid conj channel)
                 (println "\t * open channels:" (count (get @channels gid)))
