@@ -20,7 +20,8 @@
 
 (def FLAGS
   {:blocking #{}
-   :ai       #{}})
+   :ai       #{}
+   :pc       #{}})
 
 (def INITSTATE (merge MAP COMPONENTS FLAGS))
 

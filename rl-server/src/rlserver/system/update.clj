@@ -2,6 +2,7 @@
   (:require [rlserver.entity.state :refer [serialize-game game-store]]
             [rlserver.system.ai :refer [update-ai]]
             [rlserver.system.effect :refer [clean-effects]]
+            [rlserver.system.transition :refer [check-transitions]]
             [rlserver.system.action :refer [replenish-actions]]
             [rlserver.system.death :refer [update-death]]))
 
@@ -14,6 +15,7 @@
       (update id update-time)
       (update id update-death)
       (update id update-ai)
+      (update id check-transitions)
       (update id replenish-actions)))
 
 (defn update [id broadcaster]

@@ -15,7 +15,7 @@
   (let [hp (get-in state [:hp id 0])
         pos (get-in state [:pos id])]
     (cond
-      (and (<= hp 0) (contains? #{0 1} id))
+      (and (<= hp 0) (contains? (set (:pc state)) id))
       (player-die state id)
 
       (<= hp 0)

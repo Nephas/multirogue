@@ -22,7 +22,6 @@
              (GET "/" [] (slurp (io/resource "index.html")))
              (GET "/ws" [] (ws-handler (Integer/parseInt gid) (Integer/parseInt pid)))))
 
-
 (defn -main [& [port]]
   (let [port (Integer. (or port (env :port) 5000))]
     (println (str "backend - http://localhost:" port))

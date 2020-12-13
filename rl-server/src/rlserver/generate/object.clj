@@ -11,12 +11,14 @@
                  {:pos    pos
                   :sprite [8 5]}))
 
-(defn generate-stair-up [state pos]
+(defn generate-stair-up [state pos lvlid]
   (create-entity state
-                 {:pos    pos
-                  :sprite [21 1]}))
+                 {:pos        pos
+                  :transition lvlid
+                  :sprite     [21 1]}))
 
-(defn generate-stair-down [state pos]
+(defn generate-stair-down [state pos lvlid]
   (create-entity state
-                 {:pos    pos
-                  :sprite [22 1]}))
+                 {:pos        pos
+                  :transition lvlid
+                  :sprite     [22 1]}))

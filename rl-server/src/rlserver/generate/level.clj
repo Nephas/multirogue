@@ -36,8 +36,9 @@
                                         (conj corridors [(midpoint (first remaining-rooms))
                                                          (midpoint (second remaining-rooms))])))))
 
-(defn generate-level [state size]
-  (let [[x y] size
+(defn generate-level [state lvlid]
+  (let [[x y] [48 48]
+        size [x y]
         mapseed (rand-int 999999)
         t1-defs (->> [[1 1] (- x 2) (- y 2)]
                      (bsp-partition))
@@ -61,12 +62,13 @@
         rect-fields (concat corridor-fields room-fields)
         ]
     (-> state
+        (assoc :level lvlid)
         (assoc :mapsize size)
         (assoc :mapseed mapseed)
         (assoc :open (distinct (apply concat rect-fields)))
         (assoc :biome (rand-nth [:frost :castle :ruin]))
-        (generate-stair-down (rand-nth (last room-fields)))
-        (generate-stair-up (rand-nth (first room-fields)))
+        (generate-stair-up (rand-nth (first room-fields)) (dec lvlid))
+        (generate-stair-down (rand-nth (last room-fields)) (inc lvlid))
         (generate-pc 0 (rand-nth (first room-fields)))
         (generate-pc 1 (rand-nth (first room-fields)))
         (generate-bat (rand-nth (second room-fields)))

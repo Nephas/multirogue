@@ -3,7 +3,7 @@
             [rlserver.entity.state :refer [apply-seq]]))
 
 (defn replenish-ap [state id]
-  (update-in state [:ap id] replenish 1))
+  (update-in state [:ap id] replenish 2))
 
 (defn spend-ap [state id amount]
   (if (some? (get-in state [:ap id]))

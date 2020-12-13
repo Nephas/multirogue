@@ -1,10 +1,21 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <title>rl-client</title>
+    <title>rl-lobby</title>
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<div id="rl-client"></div>
-<script src="cljs-out/rl-main.js"></script>
-<script>rlclient.core.run_sketch()</script>
+<div class="container">
+    <div id="rl-client">RL Server</div>
+    <br>
+    <ul>
+        <li>
+            <a href="/game/0/player/0/client.html"> Player 0</a>
+        </li>
+        <li>
+            <a href="/game/0/player/1/client.html"> Player 1</a>
+        </li>
+    </ul>
+</div>
 </body>
 </html>

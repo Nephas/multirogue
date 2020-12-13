@@ -17,6 +17,8 @@
   (s/connect-socket!)
   (sh/fetch-tileset)
   (sh/fetch-animations)
+
+  (q/text-font (q/load-font "/font/heorot.ttf"))
   (q/color-mode :hsb 1.0)
   (q/frame-rate FRAMERATE))
 
@@ -59,12 +61,12 @@
       (q/rect 0 0 175 175)
       (q/fill 1.0)
       (q/text-size 20)
-      (q/text (str "Player: " (r/player-id)) 10 120)
-      (q/text (str "Tic: " (:tic state)) 10 150)
+      (q/text (str "Player: " (r/player-id)) 30 120)
+      (q/text (str "Tic: " (:tic state)) 30 150)
+      (q/text (str "Level: " (:level state)) 30 180)
 
       (b/red-bar [1 1] (get-in state [:hp (r/player-id)]))
-      (b/green-bar [1 2] (get-in state [:ap (r/player-id)]))
-      )))
+      (b/green-bar [1 2] (get-in state [:ap (r/player-id)])))))
 
 (defn ^:export run-sketch []
   (q/defsketch rl-client
