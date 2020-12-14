@@ -5,6 +5,7 @@
 
 (def MAP
   {:tic     0
+   :full    false
    :open    nil
    :mapsize nil
    :maphash 0
@@ -21,11 +22,22 @@
 (def FLAGS
   {:blocking #{}
    :ai       #{}
-   :pc       #{}})
+   :pc       #{}
+   :hostile  #{}})
 
 (def INITSTATE (merge MAP COMPONENTS FLAGS))
 
-(defn serialize-game [id]
+(defn serialize-diff [id]
+  (let [past (get @game-store (dec id))
+        current (get @game-store id)]
+    (do (swap! game-store assoc (dec id) current)
+        (->> current
+             (filter (fn [[k v]] (not= (get past k) v)))
+             (apply concat)
+             (apply hash-map)
+             (str)))))
+
+(defn serialize-full [id]
   (str (get @game-store id)))
 
 (defn apply-seq [state seq reducer]

@@ -31,12 +31,14 @@
       game)))
 
 (defn ai-decide [game id]
-  (let [origin (get-in game [:pos id])
-        target (get-in game [:pos 0])
-        dist (man-dist origin target)]
+  (let [hostile? (contains? (set (:hostile game)) id)
+        originpos (get-in game [:pos id])
+        [targetid targetpos] (apply min-key (fn [[pc pos]]
+                                              (man-dist originpos pos)) (select-keys (:pos game) (:pc game)))
+        dist (man-dist originpos targetpos)]
     (cond
-      (<= dist 1) (attack-towards-entity game id 0)
-      (< dist 10) (move-towards-entity game id 0)
+      (and hostile? (<= dist 1)) (attack-towards-entity game id targetid)
+      (and hostile? (< dist 10)) (move-towards-entity game id targetid)
       true (move-ai-rand game id))))
 
 (defn update-ai [game]

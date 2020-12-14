@@ -12,7 +12,7 @@
                       (or (= transitpos player0)
                           (= transitpos player1)))]
     (if transit?
-      (generate-level INITSTATE lvlid)
+      (generate-level INITSTATE lvlid (:level game))
       game)))
 
 (defn check-transitions [game]

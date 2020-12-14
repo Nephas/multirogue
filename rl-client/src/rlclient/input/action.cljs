@@ -8,10 +8,10 @@
               :s          [:move :down]
               :d          [:move :right]
 
-              :ArrowUp    [:attack :up]
-              :ArrowLeft  [:attack :left]
-              :ArrowDown  [:attack :down]
-              :ArrowRight [:attack :right]
+              :ArrowUp    [:move :up]
+              :ArrowLeft  [:move :left]
+              :ArrowDown  [:move :down]
+              :ArrowRight [:move :right]
 
               :1          [:item :1]
               :2          [:item :2]

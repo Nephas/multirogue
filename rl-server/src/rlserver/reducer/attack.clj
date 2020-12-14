@@ -1,16 +1,12 @@
 (ns rlserver.reducer.attack
   (:require [rlserver.system.action :refer [spend-ap]]
             [rllib.board :refer [move]]
+            [rllib.selector :refer [get-entities-at]]
             [rlserver.generate.effect :refer [generate-effect]]))
 
-(defn get-entities-at [state target-pos]
-  (->> (get state :pos)
-       (filter (fn [[id pos]] (= pos target-pos)))
-       (map (fn [[id pos]] id))))
-
 (defn damage [state target-pos dam]
-  (let [id (first (get-entities-at state target-pos))]
-    (if (some? (get-in state [:hp id]))
+  (let [id (first (get-entities-at state target-pos :hp))]
+    (if (some? id)
       (update-in state [:hp id 0] - dam)
       state)))
 

@@ -13,4 +13,4 @@
                  {:pos      pos
                   :hp       [2 2]
                   :animated 3}
-                 [:ai :blocking]))
+                 [:ai :blocking :hostile]))

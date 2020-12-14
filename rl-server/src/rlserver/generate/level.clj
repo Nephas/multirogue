@@ -36,7 +36,7 @@
 (defn generate-all [state rooms nmax generator]
   (apply-seq state rooms #(generate-in-room %1 %2 nmax generator)))
 
-(defn generate-level [state lvlid]
+(defn generate-level [state lvlid originlvlid]
   (set-seed! lvlid)
   (let [[x y] [48 48]
         size [x y]
@@ -61,19 +61,22 @@
         room-fields (map (fn [[[x y] w h]] (rect [x y] w h 2)) t4-defs)
         rect-fields (concat corridor-fields room-fields)
 
-        open-fields (distinct (apply concat rect-fields))]
+        open-fields (distinct (apply concat rect-fields))
+        up-room (first room-fields)
+        down-room (last room-fields)]
     (-> state
         (assoc :level lvlid)
         (assoc :mapsize size)
         (assoc :maphash (hash open-fields))
         (assoc :open open-fields)
+        (assoc :full true)
         (assoc :biome (rand-coll [:frost :castle :ruin]))
 
-        (generate-stair-up (rand-coll (first room-fields)) (dec lvlid))
-        (generate-stair-down (rand-coll (last room-fields)) (inc lvlid))
+        (generate-stair-up (rand-coll up-room) (dec lvlid))
+        (generate-stair-down (rand-coll down-room) (inc lvlid))
 
-        (generate-pc 0 (rand-coll (first room-fields)))
-        (generate-pc 1 (rand-coll (first room-fields)))
+        (generate-pc 0 (rand-coll (if (> lvlid originlvlid) up-room down-room)))
+        (generate-pc 1 (rand-coll (if (> lvlid originlvlid) up-room down-room)))
 
         (generate-all (rest room-fields) 2 generate-bat)
         (generate-all (rest room-fields) 1 generate-skeleton)

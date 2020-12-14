@@ -1,5 +1,5 @@
 (ns rlserver.system.update
-  (:require [rlserver.entity.state :refer [serialize-game game-store]]
+  (:require [rlserver.entity.state :refer [serialize-diff game-store]]
             [rlserver.system.ai :refer [update-ai]]
             [rlserver.system.effect :refer [clean-effects]]
             [rlserver.system.transition :refer [check-transitions]]
@@ -22,4 +22,4 @@
 
 (defn update [id broadcaster]
   (do (swap! game-store update-game id)
-      (broadcaster id (serialize-game id))))
+      (broadcaster id (serialize-diff id))))

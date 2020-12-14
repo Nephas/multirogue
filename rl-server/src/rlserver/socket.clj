@@ -33,6 +33,7 @@
             (do (swap! channels update gid conj channel)
                 (println "\t * open channels:" (count (get @channels gid)))
                 (broadcast gid (str "connect player " pid))
+                (broadcast gid (s/serialize-full gid))
                 (when (nil? (get @s/game-store gid))
                   (println "\t * start new game")
                   (l/initialize-game gid broadcast)))
@@ -41,4 +42,4 @@
             (let [action (read-string (last (str/split msg #"action")))]
               (do (swap! s/game-store update gid r/reduce action pid)
                   (println "\t * state tic:" (get-in @s/game-store [gid :tic]))
-                  (broadcast gid (s/serialize-game gid)))))))
+                  (broadcast gid (s/serialize-diff gid)))))))

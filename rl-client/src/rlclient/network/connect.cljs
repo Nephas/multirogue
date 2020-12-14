@@ -4,7 +4,7 @@
     [rlclient.network.session :as r]))
 
 
-(def remote-state (atom nil))
+(def remote-state (atom {}))
 
 (def socket (atom nil))
 
@@ -26,7 +26,7 @@
     (set! (.-onmessage @socket)
           (fn [event]
             (let [data (reader/read-string (.-data event))]
-              (cond (map? data) (reset! remote-state data)
+              (cond (map? data) (swap! remote-state merge data)
                     (nil? data) (send! "reset")
                     true (println "string:" data)))))))
 

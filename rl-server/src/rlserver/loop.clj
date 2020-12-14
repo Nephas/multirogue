@@ -3,7 +3,7 @@
             [rllib.constant :refer [TICSIZE]]
             [rlserver.system.update :as u]
             [rlserver.generate.level :as gl]
-            [rlserver.entity.state :refer [INITSTATE serialize-game game-store seq-store]]))
+            [rlserver.entity.state :refer [INITSTATE serialize-diff game-store seq-store]]))
 
 (def timers (atom {}))
 
@@ -18,10 +18,11 @@
   (swap! timers assoc id nil))
 
 (defn initialize-game [id broadcaster]
-    (let [state (gl/generate-level INITSTATE 1)]
+    (let [state (gl/generate-level INITSTATE 1 0)]
       (swap! game-store assoc id state)
       (start-loop! id broadcaster)))
 
 (defn destroy-game [id]
   (swap! game-store dissoc id)
+  (swap! game-store dissoc (dec id))
   (stop-loop! id))
