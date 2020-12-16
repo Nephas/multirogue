@@ -3,7 +3,7 @@
             [rlclient.graphics.camera :as c]))
 
 (defn bar [[x y] [now limit] tile]
-  (let [empty (sh/get-tile [14 11])
+  (let [empty (sh/get-tile [15 11])
         full (sh/get-tile tile)]
     (doseq [i (range limit)]
       (c/draw-fixed (if (< i now) full empty) [(+ i x) y]))))
@@ -13,3 +13,6 @@
 
 (defn green-bar [pos resource]
   (bar pos resource [13 11]))
+
+(defn yellow-bar [pos resource]
+  (bar pos resource [14 11]))

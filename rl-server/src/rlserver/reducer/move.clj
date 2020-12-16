@@ -15,6 +15,7 @@
     (open? state target)))
 
 (defn entity-move [state id dir]
-  (-> state
-      (update-in [:pos id] move dir)
-      (spend-ap id 1)))
+  (let [cost (if (contains? (set (:pc state)) id) 1 2)]
+    (-> state
+        (update-in [:pos id] move dir)
+        (spend-ap id cost))))

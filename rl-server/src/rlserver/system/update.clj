@@ -1,6 +1,6 @@
 (ns rlserver.system.update
   (:require [rlserver.entity.state :refer [serialize-diff game-store]]
-            [rlserver.system.ai :refer [update-ai]]
+            [rlserver.system.ai.ai :refer [update-ai]]
             [rlserver.system.effect :refer [clean-effects]]
             [rlserver.system.transition :refer [check-transitions]]
             [rlserver.system.consumable :refer [update-consumables]]

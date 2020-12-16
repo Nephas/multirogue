@@ -15,16 +15,15 @@
 
 (defn setup []
   (s/connect-socket!)
-  (sh/fetch-tileset)
-  (sh/fetch-animations)
+  (sh/fetch-sheets)
 
   (q/text-font (q/load-font "/font/heorot.ttf"))
   (q/color-mode :hsb 1.0)
   (q/frame-rate FRAMERATE))
 
 (defn update-state [state]
+  (sh/slice-sheets)
   (refire-key)
-  (sh/slice-tileset)
   (w/cache-walls)
   (f/cache-floors))
 
@@ -66,7 +65,10 @@
       (q/text (str "Level: " (:level state)) 30 180)
 
       (b/red-bar [1 1] (get-in state [:hp (r/player-id)]))
-      (b/green-bar [1 2] (get-in state [:ap (r/player-id)])))))
+      (b/green-bar [1 2] (get-in state [:ap (r/player-id)]))
+      (b/yellow-bar [1 3] [(get-in state [:dmg (r/player-id)])
+                           (get-in state [:dmg (r/player-id)])])
+      )))
 
 (defn ^:export run-sketch []
   (q/defsketch rl-client

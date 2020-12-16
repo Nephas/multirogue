@@ -8,7 +8,7 @@
     state))
 
 (defn replenish-ap [state id]
-  (update-in state [:ap id] replenish 1))
+    (update-in state [:ap id] replenish 1))
 
 (defn replenish-actions [game]
   (let [stats (keys (:ap game))]

@@ -5,7 +5,6 @@
 
 (def MAP
   {:tic     0
-   :full    false
    :open    nil
    :mapsize nil
    :maphash 0
@@ -17,7 +16,9 @@
    :sprite   {}
    :hp       {}
    :ap       {}
-   :effect   {}})
+   :dmg      {}
+   :effect   {}
+   :follow   {}})
 
 (def FLAGS
   {:blocking #{}
@@ -27,6 +28,12 @@
 
 (def INITSTATE (merge MAP COMPONENTS FLAGS))
 
+(defn compress [data]
+  (clojure.string/replace (str data) #"," ""))
+
+(with-open [s (clojure.java.io/output-stream "diff")]
+  ( {:compact true :schema 0} s))
+
 (defn serialize-diff [id]
   (let [past (get @game-store (dec id))
         current (get @game-store id)]
@@ -35,7 +42,7 @@
              (filter (fn [[k v]] (not= (get past k) v)))
              (apply concat)
              (apply hash-map)
-             (str)))))
+             (compress)))))
 
 (defn serialize-full [id]
   (str (get @game-store id)))

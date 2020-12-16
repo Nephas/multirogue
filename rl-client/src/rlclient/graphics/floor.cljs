@@ -5,7 +5,7 @@
 (def floormap (atom nil))
 
 (defn cache-floors []
-  (when (and (not (nil? @remote-state)) (not= (:maphash @floormap) (:maphash @remote-state)))
+  (when (and (some? @remote-state) (not= (:maphash @floormap) (:maphash @remote-state)))
     (let [{open-positions :open
            biome          :biome
            maphash        :maphash} @remote-state

@@ -13,18 +13,24 @@
 
 (defn generate-potion [state pos]
   (create-entity state
-                 {:pos    pos
-                  :sprite [17 8]
+                 {:pos        pos
+                  :sprite     [17 8]
                   :consumable :restore}))
 
-(defn generate-stair-up [state pos lvlid]
+(defn generate-stair-up [state pos [fromlvl tolvl]]
   (create-entity state
                  {:pos        pos
-                  :transition lvlid
+                  :transition [fromlvl tolvl]
                   :sprite     [21 1]}))
 
-(defn generate-stair-down [state pos lvlid]
+(defn generate-stair-down [state pos [fromlvl tolvl]]
   (create-entity state
                  {:pos        pos
-                  :transition lvlid
+                  :transition [fromlvl tolvl]
                   :sprite     [22 1]}))
+
+(defn generate-runestone [state pos]
+  (create-entity state
+                 {:pos    pos
+                  :sprite (rand-nth [[8 10] [9 10] [10 10] [11 10]])}
+                 [:blocking]))

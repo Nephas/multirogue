@@ -30,11 +30,20 @@
              (fn [s c] (update s c dissoc id))))
 
 (defn destroy-flags [state id]
-  (let [this? #(= % id)]
-    (apply-seq state (keys s/FLAGS)
-               (fn [s f] (update s f #(remove this? %))))))
+  (apply-seq state (keys s/FLAGS)
+             (fn [s f] (update s f #(remove #{id} %)))))
 
 (defn destroy-entity [state id]
   (-> state
       (destroy-components id)
       (destroy-flags id)))
+
+(defn copy-entity [target source id]
+  (-> target
+      (apply-seq (keys s/COMPONENTS)
+                 (fn [s c] (let [val (get-in source [c id])]
+                             (if (some? val)
+                               (assoc-in s [c id] val) s))))
+      (apply-seq (keys s/FLAGS)
+                 (fn [s f] (if (contains? (set (get source f)) id)
+                             (update s f conj id) s)))))

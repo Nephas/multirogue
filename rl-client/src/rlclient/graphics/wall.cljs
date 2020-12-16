@@ -49,7 +49,7 @@
     (get-wall-facing open-dirs pos)))
 
 (defn cache-walls []
-  (when (and (not (nil? @remote-state)) (not= (:maphash @wallmap) (:maphash @remote-state)))
+  (when (and (some? @remote-state) (some? @rlclient.graphics.sheets/tiles) (not= (:maphash @wallmap) (:maphash @remote-state)))
     (let [{mapsize        :mapsize
            open-positions :open
            biome          :biome

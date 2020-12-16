@@ -1,10 +1,10 @@
 (ns rlserver.generate.level
   (:require
-    [rllib.board :refer [rect]]
+    [rllib.board :refer [rect large-neighborhood]]
     [rllib.rand :refer [set-seed! uniform rand-n rand-coll new-seed]]
     [rlserver.entity.state :refer [apply-seq apply-times]]
-    [rlserver.generate.npc :refer [generate-bat generate-skeleton]]
-    [rlserver.generate.object :refer [generate-stair-up generate-stair-down generate-corpse generate-potion]]
+    [rlserver.generate.npc :refer [generate-raven generate-skeleton]]
+    [rlserver.generate.object :refer [generate-stair-up generate-stair-down generate-corpse generate-potion generate-runestone]]
     [rlserver.generate.pc :refer [generate-pc]]))
 
 
@@ -36,9 +36,14 @@
 (defn generate-all [state rooms nmax generator]
   (apply-seq state rooms #(generate-in-room %1 %2 nmax generator)))
 
-(defn generate-level [state lvlid originlvlid]
-  (set-seed! lvlid)
-  (let [[x y] [48 48]
+(defn get-biome [lvlid]
+  (cond (<= lvlid 2) :castle
+        (<= lvlid 4) :ruin
+        true :frost))
+
+(defn generate-level [state lvl fromlvl]
+  (set-seed! lvl)
+  (let [[x y] [40 40]
         size [x y]
         t1-defs (->> [[1 1] (- x 2) (- y 2)]
                      (bsp-partition))
@@ -48,37 +53,36 @@
         t3-defs (->> t2-defs
                      (map bsp-partition)
                      (apply concat))
-        t4-defs (->> t3-defs
-                     (map bsp-partition)
-                     (apply concat))
 
         corridor-defs (concat (generate-corridors t1-defs)
                               (generate-corridors t2-defs)
-                              (generate-corridors t3-defs)
-                              (generate-corridors t4-defs))
+                              (generate-corridors t3-defs))
 
         corridor-fields (map (fn [[p1 [x2 y2]]] (rect p1 [(inc x2) (inc y2)])) corridor-defs)
-        room-fields (map (fn [[[x y] w h]] (rect [x y] w h 2)) t4-defs)
+        room-fields (map (fn [[[x y] w h]] (rect [x y] w h 2)) t3-defs)
         rect-fields (concat corridor-fields room-fields)
 
-        open-fields (distinct (apply concat rect-fields))
-        up-room (first room-fields)
-        down-room (last room-fields)]
+        open-fields (distinct (apply concat rect-fields))]
     (-> state
-        (assoc :level lvlid)
+        (assoc :level lvl)
         (assoc :mapsize size)
         (assoc :maphash (hash open-fields))
         (assoc :open open-fields)
-        (assoc :full true)
-        (assoc :biome (rand-coll [:frost :castle :ruin]))
+        (assoc :biome (get-biome lvl))
 
-        (generate-stair-up (rand-coll up-room) (dec lvlid))
-        (generate-stair-down (rand-coll down-room) (inc lvlid))
+        (generate-stair-up (midpoint (first t3-defs)) [lvl (dec lvl)])
+        (generate-stair-down (midpoint (last t3-defs)) [lvl (inc lvl)])
 
-        (generate-pc 0 (rand-coll (if (> lvlid originlvlid) up-room down-room)))
-        (generate-pc 1 (rand-coll (if (> lvlid originlvlid) up-room down-room)))
+        (generate-runestone (midpoint (rand-coll t3-defs)))
 
-        (generate-all (rest room-fields) 2 generate-bat)
+        (generate-all (rest room-fields) 1 generate-raven)
         (generate-all (rest room-fields) 1 generate-skeleton)
         (generate-all (rest room-fields) 1 generate-potion)
         )))
+
+(defn with-new-pcs [state origin]
+  (let [[transitid _] (first (filter (fn [[_ [fromlvl tolvl]]] (= tolvl origin)) (:transition state)))
+        fields (vals (large-neighborhood (get-in state [:pos transitid])))]
+    (-> state
+        (generate-pc 0 (rand-coll fields))
+        (generate-pc 1 (rand-coll fields)))))
