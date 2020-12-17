@@ -1,4 +1,4 @@
-# Rogue till the End
+# Even the Gods are Gone
 
 ### Design Goals:
 
@@ -56,6 +56,7 @@
 
 ## Somber Atmosphere
 
+* [ ] Beautiful Pixel-Art loading Screens
 * [ ] melancholic music
 * [ ] cryptic snippets of flavor text
 * [ ] rain, snow, ash animation overlay
@@ -74,25 +75,77 @@
 	
 # Player Journey
 
-## Intro
+## Flavor Texts
+
+### Intro
 
 >The World has ended - for how long you do not know. Life is a burden and Death a treasure. But True Death does not come easily in this place beyond time, where the living eat the dead, and the dead eat the living.
 
 >But the lonely Godi has told you so often - there must be a place, where you can leave it behind. A place where the Raven will not find you, and drag your rotting body back into the eternal circle.
 A place - to find peace.
 
-## Runestone
+### Runestone
 
 [Random Texts of ancient Norse Tragedy]
 
-## Player Revive
+### Player Revive
 
 [Text about putting your beloved body onto the altar of the Raven]
 
-## 2-Player Death
+### 2-Player Death
 
 [Text and Image about a Giant Raven fetching your corpses back to the last city]
 
-## Goal
+### Goal
 
 [The players reach the Gates of Valhalla - the Raven cannot reach this place, so death will be final. Player choice, who kills whom.]
+
+## Levels
+
+* **General NPCs:**
+	- Godi
+	- Bard
+
+### City of the Dead
+
+* **Tileset:** Castle
+* **Generation:** BSP
+* **Assets:**
+	- Abyss
+	- Flammable Oil
+* **Effects:**
+	- Fire
+* **NPCs:**
+	- Draugr
+	- Rat
+	- Raven
+
+### The Wilderness
+
+* **Tileset:** Ruins
+* **Generation:** Cellular, expansive
+* **Assets:**
+	- Grass
+	- Lakes
+	- Trees & Bushes
+* **Effects:**
+	- Rain
+* **NPCs:**
+	- Snake
+	- Goblin
+	- Wolve
+	- Kraken
+	
+### Pass to the Edge
+
+* **Tileset:** Snowy
+* **Generation:** Cellular & BSP, 
+* **Effects:**
+	- Snow
+* **Assets:**
+	- Frost
+	- Magma
+	- Snow
+* **NPCs**
+	- Spider
+	- Norn (Frost Witch)
