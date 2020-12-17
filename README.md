@@ -1,7 +1,7 @@
 # Even the Gods are Gone
 
 <p align="left">
-  <img src="https://raw.githubusercontent.com/Nephas/multirogue/main/img/raven_8bit.png" width="450"/>
+  <img src="https://raw.githubusercontent.com/Nephas/multirogue/main/img/raven_framed.png" width="512"/>
 </p>
 
 ### Design Goals:
