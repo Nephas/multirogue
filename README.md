@@ -1,5 +1,9 @@
 # Even the Gods are Gone
 
+<p align="left">
+  <img src="https://raw.githubusercontent.com/Nephas/multirogue/main/img/raven_8bit.png" width="450"/>
+</p>
+
 ### Design Goals:
 
 1. Singleplayer & 2-Player Coop
