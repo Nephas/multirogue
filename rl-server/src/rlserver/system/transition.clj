@@ -1,6 +1,6 @@
 (ns rlserver.system.transition
   (:require [rllib.board :refer [large-neighborhood]]
-            [rlserver.generate.level :refer [generate-level]]
+            [rlserver.generate.level.level :refer [generate-level]]
             [rllib.vector :refer [man-dist]]
             [rllib.rand :refer [rand-coll]]
             [rlserver.entity.state :refer [INITSTATE apply-seq]]
@@ -19,16 +19,21 @@
       (place-near-transition 0 fromlvl)
       (place-near-transition 1 fromlvl)))
 
+(defn should-transit? [game id]
+  (let [get-pos #(get-in game [:pos %])
+        player-at-transit? #(= (get-pos id) (get-pos %))
+        dead? #(zero? (get-in game [:hp % 0]))
+        close? (<= (man-dist (get-pos 0) (get-pos 1)) 2)
+        not-ai? #(not (contains? (set (:ai game)) %))]
+    (or (and (player-at-transit? 1) (dead? 0))
+        (and (player-at-transit? 0) (dead? 1))
+        (and close? (player-at-transit? 0) (not-ai? 0))
+        (and close? (player-at-transit? 1) (not-ai? 1)))))
+
 (defn check-transition [game [id [fromlvl tolvl]]]
-  (let [transitpos (get-in game [:pos id])
-        player0 (get-in game [:pos 0])
-        player1 (get-in game [:pos 1])
-        transit? (and (<= (man-dist player0 player1) 2)
-                      (or (and (= transitpos player0) (not (contains? (set (:ai game)) 0)))
-                          (and (= transitpos player1) (not (contains? (set (:ai game)) 1)))))]
-    (if transit?
-      (transit-level game tolvl fromlvl)
-      game)))
+  (if (and (some? tolvl) (should-transit? game id))
+    (transit-level game tolvl fromlvl)
+    game))
 
 (defn check-transitions [game]
   (apply-seq game (:transition game) check-transition))

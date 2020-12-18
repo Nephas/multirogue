@@ -4,7 +4,7 @@
 
 (defn open? [state pos]
   (let [open-pos (:open state)
-        blocked-pos (vals (select-keys (:pos state) (:blocking state)))
+        blocked-pos (vals (select-keys (:pos state) (:block state)))
         open (some #(= pos %) open-pos)
         blocked (some #(= pos %) blocked-pos)]
     (and open (not blocked))))

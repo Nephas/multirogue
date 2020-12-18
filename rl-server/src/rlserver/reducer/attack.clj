@@ -9,7 +9,7 @@
   (let [pos (get-in state [:pos targetid])
         dmg (get-in state [:dmg attackerid])]
     (-> state
-        (generate-effect pos 4)
+        (generate-effect pos 6)
         (update-in [:hp targetid] spend dmg)
         (spend-ap attackerid 1))))
 
@@ -17,7 +17,7 @@
   (let [pos (get-in state [:pos targetid])
         dmg (get-in state [:dmg attackerid])]
     (-> state
-        (generate-effect pos 5)
+        (generate-effect pos 7)
         (update-in [:ap targetid] spend dmg)
         (spend-ap attackerid 1))))
 

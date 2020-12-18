@@ -10,6 +10,7 @@
                  [http-kit "2.3.0"]
                  [environ "1.1.0"]
 
+                 [org.clojure/data.codec "0.1.1"]
                  [org.clojure/data.json "1.0.0"]]
 
   :plugins [[environ/environ.lein "0.3.1"]]

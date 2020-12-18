@@ -2,7 +2,7 @@
   (:require [ruiyun.tools.timer :as t]
             [rllib.constant :refer [TICSIZE]]
             [rlserver.system.update :as u]
-            [rlserver.generate.level :refer [generate-level with-new-pcs]]
+            [rlserver.generate.level.level :refer [generate-level with-new-pcs]]
             [rlserver.entity.state :refer [INITSTATE serialize-diff game-store seq-store]]))
 
 (def timers (atom {}))
@@ -20,7 +20,7 @@
 (defn initialize-game [id broadcaster]
     (let [state (-> INITSTATE
                     (generate-level 1 0)
-                    (with-new-pcs 0))]
+                    (with-new-pcs))]
       (swap! game-store assoc id state)
       (start-loop! id broadcaster)))
 

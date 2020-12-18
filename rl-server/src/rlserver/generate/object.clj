@@ -33,4 +33,4 @@
   (create-entity state
                  {:pos    pos
                   :sprite (rand-nth [[8 10] [9 10] [10 10] [11 10]])}
-                 [:blocking]))
+                 [:block]))

@@ -5,6 +5,7 @@
 
             [org.httpkit.server :as http]
             [environ.core :refer [env]]
+            [rlserver.entity.state :refer [serialize-json]]
             [rlserver.socket :refer [handle]]
             [clojure.java.io :as io]))
 
@@ -18,9 +19,11 @@
 (defroutes routes
            (route/resources "/")
            (GET "/" [] (slurp (io/resource "index.html")))
-           (context "/game/:gid/player/:pid" [gid pid]
-             (GET "/" [] (slurp (io/resource "index.html")))
-             (GET "/ws" [] (ws-handler (Integer/parseInt gid) (Integer/parseInt pid)))))
+           (context "/game/:gid" [gid]
+             (GET "/state" [] (serialize-json gid))
+             (context "/player/:pid" [pid]
+               (GET "/" [] (slurp (io/resource "index.html")))
+               (GET "/ws" [] (ws-handler (Integer/parseInt gid) (Integer/parseInt pid))))))
 
 (defn -main [& [port]]
   (let [port (Integer. (or port (env :port) 5000))]

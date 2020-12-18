@@ -25,10 +25,12 @@
   (println "\t * player" pid "joined")
   (-> state
       (update :ai #(remove #{pid} %))
+      (assoc-in [:animated pid] pid)
       (update :follow #(dissoc % pid))))
 
 (defn player-disjoin [state pid]
   (println "\t * player left")
   (-> state
       (update :ai conj pid)
+      (assoc-in [:animated pid] (+ pid 2))
       (assoc-in [:follow pid] (other pid))))

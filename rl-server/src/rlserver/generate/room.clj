@@ -1,3 +1,0 @@
-(ns rlserver.generate.room)
-
-

@@ -11,7 +11,7 @@
                   :hp       [5 5]
                   :ap       [0 5]
                   :dmg      3
-                  :animated id
+                  :animated (+ id 2)
                   :follow (other id)}
-                 [:blocking :pc :ai]
+                 [:block :pc :ai]
                  id))

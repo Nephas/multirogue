@@ -17,6 +17,7 @@
   (s/connect-socket!)
   (sh/fetch-sheets)
 
+  (q/no-smooth)
   (q/text-font (q/load-font "/font/heorot.ttf"))
   (q/color-mode :hsb 1.0)
   (q/frame-rate FRAMERATE))

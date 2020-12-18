@@ -1,4 +1,7 @@
-(ns rlserver.entity.state)
+(ns rlserver.entity.state
+  (:require [clojure.data.json :as json]
+            [clojure.data.codec.base64 :as b64]
+            [clojure.string :as s]))
 
 (def game-store (atom {}))
 (def seq-store (atom 10))
@@ -21,18 +24,20 @@
    :follow   {}})
 
 (def FLAGS
-  {:blocking #{}
-   :ai       #{}
-   :pc       #{}
-   :hostile  #{}})
+  {:block   #{}
+   :ai      #{}
+   :pc      #{}
+   :hostile #{}})
 
 (def INITSTATE (merge MAP COMPONENTS FLAGS))
 
 (defn compress [data]
-  (clojure.string/replace (str data) #"," ""))
-
-(with-open [s (clojure.java.io/output-stream "diff")]
-  ( {:compact true :schema 0} s))
+  (-> (str data)
+      (s/replace #"," "")
+      (s/replace #"\] " "]")
+      (s/replace #" \[" "[")
+      (s/replace #"\} " "}")
+      (s/replace #" \{" "{")))
 
 (defn serialize-diff [id]
   (let [past (get @game-store (dec id))
@@ -46,6 +51,9 @@
 
 (defn serialize-full [id]
   (str (get @game-store id)))
+
+(defn serialize-json [id]
+  (json/write-str (get @game-store id)))
 
 (defn apply-seq [state seq reducer]
   (loop [[current & remaining] seq

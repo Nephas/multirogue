@@ -4,8 +4,8 @@
             [rlclient.network.connect :as s]
             [rlclient.network.session :as r]))
 
-(def SIZE 8)
-(def SCALE 3)
+(def SIZE 24)
+(def SCALE 1)
 (def MAPRES [1024 800])
 (def MAPSIZE (scalar (/ 1 SCALE SIZE) MAPRES))
 

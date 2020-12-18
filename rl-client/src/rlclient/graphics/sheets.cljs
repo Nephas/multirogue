@@ -14,7 +14,7 @@
 
 (defn get-animation [n seed]
   (let [fr (mod (+ seed (q/frame-count)) 5)]
-    (nth @animations (+ n (* fr 8)))))
+    (nth @animations (+ n (* fr 16)))))
 
 (defn get-dims [img]
   [(/ (. img -width) SIZE) (/ (. img -height) SIZE)])
@@ -38,5 +38,5 @@
 (defn fetch-sheets []
   (let [origin (. (. js/document -location) -origin)]
     (do (print "fetching graphics sheets")
-        (reset! tilesheet (q/load-image (str origin "/img/tileset.png")))
-        (reset! animationsheet (q/load-image (str origin "/img/animations.png"))))))
+        (reset! tilesheet (q/load-image (str origin "/img/tileset_" SIZE ".png")))
+        (reset! animationsheet (q/load-image (str origin "/img/animations_" SIZE ".png"))))))
