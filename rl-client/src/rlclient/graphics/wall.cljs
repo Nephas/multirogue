@@ -50,14 +50,16 @@
 
 (defn cache-walls []
   (when (and (some? @remote-state) (some? @rlclient.graphics.sheets/tiles) (not= (:maphash @wallmap) (:maphash @remote-state)))
-    (let [{mapsize        :mapsize
-           open-positions :open
-           biome          :biome
-           maphash        :maphash} @remote-state
-          positions (rect [0 0] mapsize)
-          wall-positions (set/difference (set positions) (set open-positions))
+    (let [{mapsize :mapsize
+           open    :open
+           biome   :biome
+           maphash :maphash} @remote-state
+          wall-positions (filter (fn [pos] (zero? (get-in open pos)))
+                                 (rect [0 0] mapsize))
+          open-positions (filter (fn [pos] (not (zero? (get-in open pos))))
+                                 (rect [0 0] mapsize))
           cached-tiles (tm/cache-map wall-positions
-                              #(tm/with-biome (get-walltile open-positions %) biome))]
+                                     #(tm/with-biome (get-walltile open-positions %) biome))]
       (reset! wallmap
               {:maphash maphash
                :tiles   cached-tiles}))))

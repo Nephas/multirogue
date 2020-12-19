@@ -21,5 +21,5 @@
       (update id replenish-actions)))
 
 (defn update [id broadcaster]
-  (time (do (swap! game-store update-game id)
-            (broadcaster id (serialize-diff id)))))
+  (do (swap! game-store update-game id)
+      (broadcaster id (serialize-diff id))))

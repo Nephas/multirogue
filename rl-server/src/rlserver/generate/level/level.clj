@@ -49,6 +49,13 @@
         rect-fields (concat corridor-fields room-fields)]
     (distinct (apply concat rect-fields))))
 
+(defn wallmap
+  ([[x y]] (let [generate-col #(into [] (take % (repeat 0)))]
+             (into [] (take x (repeat (generate-col y))))))
+  ([[x y] tier-defs corridor-defs] (-> (wallmap [x y])
+                                       (apply-seq (open-fields tier-defs corridor-defs)
+                                                  (fn [m p] (assoc-in m p 1))))))
+
 (defn get-biome [lvlid]
   (get {1 :castle
         2 :ruin
@@ -89,7 +96,7 @@
 
         tier-defs (bsp-rooms x y (get-tiers lvl))
         corridor-defs (bsp-corridors tier-defs (get-corridorsize lvl))
-        open-fields (open-fields tier-defs corridor-defs)
+        open (wallmap [x y] tier-defs corridor-defs)
 
         stair-up (midpoint (rand-coll (last tier-defs)))
         stair-down (apply max-key (fn [pos] (man-dist pos stair-up))
@@ -97,8 +104,8 @@
     (-> state
         (merge {:level   lvl
                 :mapsize [x y]
-                :open    open-fields
-                :maphash (hash open-fields)
+                :open    open
+                :maphash (hash open)
                 :biome   biome})
 
         (generate-stair-up stair-up [lvl (if (not= 1 lvl) (dec lvl))])

@@ -2,12 +2,11 @@
   (:require [rlserver.system.action :refer [active? spend-ap]]
             [rllib.board :refer [move]]))
 
-(defn open? [state pos]
-  (let [open-pos (:open state)
-        blocked-pos (vals (select-keys (:pos state) (:block state)))
-        open (some #(= pos %) open-pos)
-        blocked (some #(= pos %) blocked-pos)]
-    (and open (not blocked))))
+(defn open? [state [x y]]
+  (let [blocked-pos (vals (select-keys (:pos state) (:block state)))
+        open? (= 1 (get-in state [:open x y]))
+        blocked? (contains? #{[x y]} (set blocked-pos))]
+    (and open? (not blocked?))))
 
 (defn moveable? [state direction pid]
   (let [origin (get-in state [:pos pid])
