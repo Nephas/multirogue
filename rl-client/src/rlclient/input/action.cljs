@@ -18,7 +18,7 @@
               :3          [:item :3]
 
               :t          [:pass nil]
-              :space      [:attack nil]})
+              :space      [:pass nil]})
 
 (defn move-target [dir]
   (let [pos (get-in @remote-state [:pos (s/player-id)])]
@@ -32,11 +32,22 @@
          (filter (fn [[id pos]] (and (= pos target-pos) (contains? hp-comps id))))
          (not-empty?))))
 
+(defn loading-screen? []
+  (not (neg? (get @remote-state :load))))
+
 (defn player-alive? []
   (> (get-in @remote-state [:hp (s/player-id) 0]) 0))
 
 (defn context-action [key]
   (let [[primary secondary] (get actions key)]
-    (if (and (= :move primary) (has-hp? (move-target secondary)))
+    (cond
+      (loading-screen?)
+      (if (= :space key) [:continue nil] nil)
+
+      (not (player-alive?))
+      nil
+
+      (and (= :move primary) (has-hp? (move-target secondary)))
       [:attack secondary]
-      [primary secondary])))
+
+      true [primary secondary])))

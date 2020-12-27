@@ -4,6 +4,7 @@
 (defn generate-corpse [state pos]
   (create-entity state
                  {:pos    pos
+                  :desc   "bones"
                   :sprite [8 7]}))
 
 (defn generate-blood [state pos]
@@ -14,23 +15,27 @@
 (defn generate-potion [state pos]
   (create-entity state
                  {:pos        pos
+                  :desc       "potion"
                   :sprite     [17 8]
-                  :consumable :restore}))
+                  :consumable :heal}))
 
 (defn generate-stair-up [state pos [fromlvl tolvl]]
   (create-entity state
                  {:pos        pos
+                  :desc       "stairs"
                   :transition [fromlvl tolvl]
                   :sprite     [21 1]}))
 
 (defn generate-stair-down [state pos [fromlvl tolvl]]
   (create-entity state
                  {:pos        pos
+                  :desc       "stairs"
                   :transition [fromlvl tolvl]
                   :sprite     [22 1]}))
 
-(defn generate-runestone [state pos]
+(defn generate-goal [state pos fromlvl]
   (create-entity state
-                 {:pos    pos
-                  :sprite (rand-nth [[8 10] [9 10] [10 10] [11 10]])}
-                 [:block]))
+                 {:pos        pos
+                  :transition [fromlvl 999]
+                  :sprite     [15 1]}))
+

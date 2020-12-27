@@ -4,6 +4,7 @@
 
 (def tilesheet (atom nil))
 (def animationsheet (atom nil))
+(def image (atom {}))
 
 (def tiles (atom nil))
 (def animations (atom nil))
@@ -40,3 +41,12 @@
     (do (print "fetching graphics sheets")
         (reset! tilesheet (q/load-image (str origin "/img/tileset_" SIZE ".png")))
         (reset! animationsheet (q/load-image (str origin "/img/animations_" SIZE ".png"))))))
+
+(defn fetch-images []
+  (let [origin (. (. js/document -location) -origin)]
+    (do (print "fetching images")
+        (swap! image assoc 0 (q/load-image (str origin "/img/image_0.png")))
+        (swap! image assoc 1 (q/load-image (str origin "/img/image_1.png"))))))
+
+(defn image-loaded [index]
+  (and (some? (get @image index)) (quil.core/loaded? (get @image index))))

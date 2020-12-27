@@ -1,11 +1,17 @@
 (ns rlserver.reducer.move
   (:require [rlserver.system.action :refer [active? spend-ap]]
-            [rllib.board :refer [move]]))
+            [rllib.board :refer [move]]
+            [rlserver.generate.timer :refer [generate-sprite-effect]]))
 
-(defn open? [state [x y]]
+(def move-effect {:up    [12 12]
+                  :down  [13 12]
+                  :right [14 12]
+                  :left  [15 12]})
+
+(defn open? [state pos]
   (let [blocked-pos (vals (select-keys (:pos state) (:block state)))
-        open? (= 1 (get-in state [:open x y]))
-        blocked? (contains? #{[x y]} (set blocked-pos))]
+        blocked? (some #(= % pos) blocked-pos)
+        open? (= 1 (get-in state (cons :open pos)))]
     (and open? (not blocked?))))
 
 (defn moveable? [state direction pid]
@@ -14,7 +20,6 @@
     (open? state target)))
 
 (defn entity-move [state id dir]
-  (let [cost (if (contains? (set (:pc state)) id) 1 2)]
-    (-> state
-        (update-in [:pos id] move dir)
-        (spend-ap id cost))))
+  (-> state
+      (generate-sprite-effect (get-in state [:pos id]) (get move-effect dir) 1)
+      (update-in [:pos id] move dir)))

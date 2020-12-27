@@ -1,5 +1,5 @@
 (ns rlserver.generate.level.frost
-  (:require [rlserver.generate.object :refer [generate-runestone]]
+  (:require [rlserver.generate.runes :refer [generate-blood-circle]]
             [rllib.board :refer [midpoint]]
             [rlserver.generate.level.room :refer [rand-field]]
             [rlserver.entity.state :refer [apply-seq]]
@@ -12,7 +12,5 @@
 
 (defn generate-frost-level [state tier-defs corridor-defs]
   (-> state
-      (generate-runestone (rand-field (rand-coll (last tier-defs))))
-      (generate-runestone (rand-field (rand-coll (last tier-defs))))
-      (generate-runestone (rand-field (rand-coll (last tier-defs))))
+      (generate-blood-circle (rand-field (rand-coll (last tier-defs)) 3))
       (generate-wolves tier-defs)))

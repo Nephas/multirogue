@@ -16,8 +16,8 @@
 
 (defn handle-key [key]
   (cond (= key :r) (send-reset!)
-        (and (contains? actions key) (player-alive?))
-        (send-commit! (context-action key))))
+        (contains? actions key) (let [action (context-action key)]
+                                  (when (some? action) (send-commit! action)))))
 
 (defn handle-event [state event]
   (let [key (q/key-as-keyword)]

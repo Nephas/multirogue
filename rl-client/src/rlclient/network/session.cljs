@@ -17,8 +17,9 @@
                        (second)
                        (str/split #"/")
                        (first)
-                       (js/parseInt)
-                       ))
+                       (js/parseInt)))
+
+(defn other-player [] (mod (inc (player-id)) 2))
 
 (defn game-id [] (-> (path)
                      (str/split #"game/")

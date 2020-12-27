@@ -8,7 +8,7 @@
     [rlserver.generate.level.castle :refer [generate-castle-level]]
     [rlserver.generate.level.ruin :refer [generate-ruin-level]]
     [rlserver.generate.level.frost :refer [generate-frost-level]]
-    [rlserver.generate.object :refer [generate-stair-up generate-stair-down generate-corpse generate-potion generate-runestone]]
+    [rlserver.generate.object :refer [generate-goal generate-stair-up generate-stair-down generate-corpse generate-potion]]
     [rlserver.generate.pc :refer [generate-pc]]))
 
 (defn bsp-partition [[[x y] w h]]
@@ -89,6 +89,11 @@
         :ruin   generate-ruin-level
         :frost  generate-frost-level} biome))
 
+(defn generate-exit [state pos lvl]
+  (if (= lvl 5)
+    (generate-goal state pos lvl)
+    (generate-stair-down state pos [lvl (inc lvl)])))
+
 (defn generate-level [state lvl fromlvl]
   (set-seed! lvl)
   (let [[x y] (get-size lvl)
@@ -98,8 +103,8 @@
         corridor-defs (bsp-corridors tier-defs (get-corridorsize lvl))
         open (wallmap [x y] tier-defs corridor-defs)
 
-        stair-up (midpoint (rand-coll (last tier-defs)))
-        stair-down (apply max-key (fn [pos] (man-dist pos stair-up))
+        entry-pos (midpoint (rand-coll (last tier-defs)))
+        exit-pos (apply max-key (fn [pos] (man-dist pos entry-pos))
                           (map midpoint (last tier-defs)))]
     (-> state
         (merge {:level   lvl
@@ -108,14 +113,13 @@
                 :maphash (hash open)
                 :biome   biome})
 
-        (generate-stair-up stair-up [lvl (if (not= 1 lvl) (dec lvl))])
-        (generate-stair-down stair-down [lvl (if (not= lvl 5) (inc lvl))])
-
+        (generate-stair-up entry-pos [lvl (if (not= 1 lvl) (dec lvl))])
+        (generate-exit exit-pos lvl)
         ((get-generator biome) tier-defs corridor-defs))))
 
 (defn with-new-pcs [state]
   (let [[transitid _] (first (filter (fn [[_ [fromlvl tolvl]]] (= tolvl nil)) (:transition state)))
         fields (vals (large-neighborhood (get-in state [:pos transitid])))]
     (-> state
-        (generate-pc 0 (rand-coll fields))
-        (generate-pc 1 (rand-coll fields)))))
+        (generate-pc 0 "Hervor" (rand-coll fields))
+        (generate-pc 1 "Yrsa" (rand-coll fields)))))

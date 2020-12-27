@@ -11,20 +11,26 @@
   (if (nil? (get @timers id))
     (let [timer (t/timer (str id))]
       (swap! timers assoc id timer)
-      (t/run-task! #(u/update id broadcaster) :period TICSIZE :by timer))))
+      ;(t/run-task! #(u/update id broadcaster) :period TICSIZE :by timer)
+
+      )))
 
 (defn stop-loop! [id]
   (t/cancel! (get @timers id))
   (swap! timers assoc id nil))
 
-(defn initialize-game [id broadcaster]
-    (let [state (-> INITSTATE
-                    (generate-level 1 0)
-                    (with-new-pcs))]
-      (swap! game-store assoc id state)
-      (start-loop! id broadcaster)))
 
 (defn destroy-game [id]
-  (swap! game-store dissoc id)
-  (swap! game-store dissoc (dec id))
-  (stop-loop! id))
+  (do (swap! game-store dissoc id)
+      (swap! game-store dissoc (dec id))))
+
+(defn preload-game [id]
+  (do (println "\t * new game")
+      (destroy-game id)
+      (swap! game-store assoc id (assoc INITSTATE :load 0))))
+
+(defn initialize-game [id]
+  (do (println "\t * generating new level")
+      (swap! game-store update id #(-> %
+                                       (generate-level 1 0)
+                                       (with-new-pcs)))))

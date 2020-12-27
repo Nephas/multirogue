@@ -15,11 +15,9 @@
       game)))
 
 (defn ai-decide [game id]
-  (let [ap (get-in game [:ap id 0])
-        hostile? (contains? (set (:hostile game)) id)
+  (let [hostile? (contains? (set (:hostile game)) id)
         follow? (contains? (:follow game) id)]
     (cond
-      (< ap 2) game
       hostile? (ai-move-hostile game id)
       follow? (ai-move-follow game id)
       true (ai-move-rand game id))))

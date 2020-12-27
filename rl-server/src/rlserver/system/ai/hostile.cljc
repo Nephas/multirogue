@@ -21,10 +21,10 @@
 
 (defn ai-move-hostile [game id]
   (let [originpos (get-in game [:pos id])
-        closest (fn [[pc pos]] (man-dist originpos pos))
+        closest (fn [[_ pos]] (man-dist originpos pos))
         [targetid targetpos] (apply min-key closest (select-keys (:pos game) (:pc game)))
         dist (man-dist originpos targetpos)]
     (cond
       (<= dist 1) (attack-towards-entity game id targetid)
-      (< dist 12) (move-towards-entity game id targetid)
+      (< dist 12) (move-towards-entity game id targetid 2)
       true (ai-move-rand game id))))

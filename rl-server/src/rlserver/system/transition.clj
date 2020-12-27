@@ -12,21 +12,25 @@
     (assoc-in game [:pos id] (rand-coll fields))))
 
 (defn transit-level [game tolvl fromlvl]
-  (-> INITSTATE
-      (generate-level tolvl fromlvl)
-      (copy-entity game 0)
-      (copy-entity game 1)
-      (place-near-transition 0 fromlvl)
-      (place-near-transition 1 fromlvl)))
+  (if (= 999 tolvl)
+    (assoc INITSTATE :load 1)
+    (-> INITSTATE
+        (generate-level tolvl fromlvl)
+        (copy-entity game 0)
+        (copy-entity game 1)
+        (assoc :pap (:pap game))
+        (place-near-transition 0 fromlvl)
+        (place-near-transition 1 fromlvl))))
 
 (defn should-transit? [game id]
   (let [get-pos #(get-in game [:pos %])
         player-at-transit? #(= (get-pos id) (get-pos %))
         dead? #(zero? (get-in game [:hp % 0]))
         close? (<= (man-dist (get-pos 0) (get-pos 1)) 2)
-        not-ai? #(not (contains? (set (:ai game)) %))]
-    (or (and (player-at-transit? 1) (dead? 0))
-        (and (player-at-transit? 0) (dead? 1))
+        ai? #(contains? (set (:ai game)) %)
+        not-ai? #(not (ai? %))]
+    (or (and (player-at-transit? 1) (or (dead? 0) (ai? 0)))
+        (and (player-at-transit? 0) (or (dead? 1) (ai? 1)))
         (and close? (player-at-transit? 0) (not-ai? 0))
         (and close? (player-at-transit? 1) (not-ai? 1)))))
 

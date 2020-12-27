@@ -1,6 +1,5 @@
 (ns rlserver.entity.state
   (:require [clojure.data.json :as json]
-            [clojure.data.codec.base64 :as b64]
             [clojure.string :as s]))
 
 (def game-store (atom {}))
@@ -8,19 +7,22 @@
 
 (def MAP
   {:tic     0
+   :turn    0
+   :load    -1
    :open    nil
    :mapsize nil
    :maphash 0
-   :biome   nil})
+   :biome   nil
+   :pap     [0 0]})
 
 (def COMPONENTS
   {:pos      {}
+   :desc     {}
    :animated {}
    :sprite   {}
    :hp       {}
-   :ap       {}
    :dmg      {}
-   :effect   {}
+   :timer    {}
    :follow   {}})
 
 (def FLAGS

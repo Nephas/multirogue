@@ -8,7 +8,9 @@
 (defn player-die [state id]
   (-> state
       (update :animated dissoc id)
-      (assoc-in [:ap id 0] 0)
+      (update :follow dissoc id)
+      (update :ai #(remove #{id} %))
+      (update :block #(remove #{id} %))
       (assoc-in [:sprite id] [8 8])))
 
 (defn check-death [state id]
