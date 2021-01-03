@@ -24,7 +24,10 @@
       ;walls
       (doseq [[pos tile] (:tiles @w/wallmap)]
         (when (in-fov? pos)
-          (c/at-mappos (sh/get-tile tile) pos)))
+          (c/at-mappos (sh/get-tile tile) pos))
+        (when (explored? pos)
+          (c/at-mappos (sh/get-tile tile) pos)
+          (c/at-mappos (sh/get-tile [0 0]) pos)))
 
       ;floors
       (doseq [[pos tile] (:tiles @f/floormap)]

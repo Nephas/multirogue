@@ -4,7 +4,7 @@
             [rlserver.generate.level.room :refer [rand-field]]
             [rllib.state :refer [apply-seq]]
             [rlserver.generate.npc :refer [generate-wolf]]
-            [rllib.rand :refer [rand-coll rand-bool]]))
+            [rllib.rand :refer [rand-coll rand-bool rand-n]]))
 
 (defn generate-wolves [state tier-defs]
   (let [rooms (last tier-defs)]

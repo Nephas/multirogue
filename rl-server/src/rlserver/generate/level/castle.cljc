@@ -4,11 +4,11 @@
             [rlserver.generate.level.room :refer [rand-field]]
             [rllib.state :refer [apply-seq]]
             [rlserver.generate.npc :refer [generate-raven generate-skeleton]]
-            [rllib.rand :refer [rand-coll rand-bool]]))
+            [rllib.rand :refer [rand-coll rand-bool rand-n]]))
 
 (defn generate-skeletons [state tier-defs]
   (let [rooms (last tier-defs)]
-    (apply-seq state rooms (fn [s r] (if (zero? (rand-int 4)) (generate-skeleton s (rand-field r)) s)))))
+    (apply-seq state rooms (fn [s r] (if (zero? (rand-n 4)) (generate-skeleton s (rand-field r)) s)))))
 
 (defn generate-ravens [state tier-defs]
   (let [rooms (last tier-defs)]

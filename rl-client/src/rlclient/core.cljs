@@ -30,7 +30,7 @@
   (refire-key)
   (w/cache-walls)
   (f/cache-floors)
-  (fov/update-fov-map))
+  (fov/update-fovmap))
 
 (defn draw-state [state]
   (let [state @s/remote-state]
