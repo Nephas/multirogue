@@ -1,7 +1,7 @@
 (ns rlserver.system.death
   (:require [rlserver.generate.object :refer [generate-corpse]]
             [rlserver.entity.entity :refer [destroy-entity]]
-            [rlserver.entity.state :refer [apply-seq]]))
+            [rllib.state :refer [apply-seq]]))
 
 
 

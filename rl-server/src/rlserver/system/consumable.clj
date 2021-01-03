@@ -4,7 +4,7 @@
     [rlserver.generate.object :refer [generate-corpse]]
     [rlserver.system.resource :refer [replenish]]
     [rlserver.entity.entity :refer [destroy-entity]]
-    [rlserver.entity.state :refer [apply-seq]]))
+    [rllib.state :refer [apply-seq]]))
 
 (def effects {:buff (fn [s uid] (-> s
                                     (update-in [:hp uid 0] inc)

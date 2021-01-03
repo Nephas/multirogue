@@ -1,5 +1,6 @@
 (ns rlserver.entity.entity
-  (:require [rlserver.entity.state :refer [seq-store apply-seq]]
+  (:require [rlserver.entity.state :refer [seq-store]]
+            [rllib.state :refer [apply-seq]]
             [rlserver.entity.state :as s]))
 
 (defn new-id []

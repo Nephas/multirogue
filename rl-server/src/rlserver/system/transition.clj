@@ -3,7 +3,8 @@
             [rlserver.generate.level.level :refer [generate-level]]
             [rllib.vector :refer [man-dist]]
             [rllib.rand :refer [rand-coll]]
-            [rlserver.entity.state :refer [INITSTATE apply-seq]]
+            [rllib.state :refer [apply-seq]]
+            [rlserver.entity.state :refer [INITSTATE]]
             [rlserver.entity.entity :refer [copy-entity]]))
 
 (defn place-near-transition [game id origin]

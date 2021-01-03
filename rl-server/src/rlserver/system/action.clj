@@ -1,6 +1,5 @@
 (ns rlserver.system.action
-  (:require [rlserver.system.resource :refer [replenish spend]]
-            [rlserver.entity.state :refer [apply-seq]]))
+  (:require [rlserver.system.resource :refer [replenish spend]]))
 
 (defn spend-ap [state amount]
   (update state :pap spend amount))

@@ -1,6 +1,7 @@
 (ns rlclient.graphics.wall
   (:require [clojure.set :as set]
             [rlclient.graphics.tilemap :as tm]
+            [rlclient.graphics.sheets :refer [tiles]]
             [rllib.board :refer [large-neighborhood rect]]
             [rlclient.network.connect :refer [remote-state]]))
 
@@ -49,7 +50,7 @@
     (get-wall-facing open-dirs pos)))
 
 (defn cache-walls []
-  (when (and (some? @remote-state) (some? @rlclient.graphics.sheets/tiles) (not= (:maphash @wallmap) (:maphash @remote-state)))
+  (when (and (some? @remote-state) (some? @tiles) (not= (:maphash @wallmap) (:maphash @remote-state)))
     (let [{mapsize :mapsize
            open    :open
            biome   :biome

@@ -5,7 +5,7 @@
     [rlserver.reducer.move :refer [moveable? entity-move]]
     [rlserver.system.ai.follow :refer [step-closer move-towards-entity]]
     [rlserver.reducer.attack :refer [entity-attack]]
-    [rlserver.entity.state :refer [apply-seq]]))
+    [rllib.state :refer [apply-seq]]))
 
 (defn ai-move-rand [game id]
   (let [dir (rand-nth [:up :down :left :right])]

@@ -3,7 +3,7 @@
             [rlserver.generate.runes :refer [generate-blood-circle]]
             [rllib.board :refer [midpoint]]
             [rlserver.generate.level.room :refer [rand-field]]
-            [rlserver.entity.state :refer [apply-seq]]
+            [rllib.state :refer [apply-seq]]
             [rlserver.generate.npc :refer [generate-snake]]
             [rllib.rand :refer [rand-coll rand-bool]]))
 

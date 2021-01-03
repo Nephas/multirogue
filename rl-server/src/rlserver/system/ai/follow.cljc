@@ -1,7 +1,7 @@
 (ns rlserver.system.ai.follow
   (:require [rlserver.reducer.move :refer [moveable? entity-move]]
             [rllib.vector :refer [add man-dist]]
-            [rlserver.entity.state :refer [apply-times]]
+            [rllib.state :refer [apply-times]]
             [rllib.board :refer [small-neighborhood move]]))
 
 (defn step-closer [origin target]

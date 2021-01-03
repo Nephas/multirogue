@@ -3,14 +3,13 @@
             [quil.middleware :as m]
             [rlclient.input.input :refer [handle-event refire-key]]
             [rlclient.network.connect :as s]
-            [rlclient.network.session :as r]
             [rlclient.render.world :refer [render-world!]]
             [rlclient.render.loading :refer [render-loadscreen!]]
             [rlclient.graphics.sheets :as sh]
-            [rlclient.graphics.gui.bar :as b]
             [rlclient.graphics.camera :as c]
             [rlclient.graphics.wall :as w]
             [rlclient.graphics.floor :as f]
+            [rlclient.render.fov :as fov]
             [rlclient.graphics.sheets :as sh]
             [rllib.constant :refer [FRAMERATE]]
             ))
@@ -30,7 +29,8 @@
   (sh/slice-sheets)
   (refire-key)
   (w/cache-walls)
-  (f/cache-floors))
+  (f/cache-floors)
+  (fov/update-fov-map))
 
 (defn draw-state [state]
   (let [state @s/remote-state]

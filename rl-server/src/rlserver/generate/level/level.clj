@@ -1,9 +1,9 @@
 (ns rlserver.generate.level.level
   (:require
-    [rllib.board :refer [rect large-neighborhood midpoint]]
+    [rllib.board :refer [rect rect-array large-neighborhood midpoint]]
     [rllib.vector :refer [man-dist sub add]]
     [rllib.rand :refer [set-seed! uniform rand-n rand-coll new-seed]]
-    [rlserver.entity.state :refer [apply-seq apply-times]]
+    [rllib.state :refer [apply-seq apply-times]]
     [rlserver.generate.npc :refer [generate-raven generate-skeleton]]
     [rlserver.generate.level.castle :refer [generate-castle-level]]
     [rlserver.generate.level.ruin :refer [generate-ruin-level]]
@@ -22,7 +22,7 @@
                   [[[x y] w h1]
                    [[x (+ y h1)] w h2]]))))
 
-(defn bsp-rooms [x y n]
+(defn bsp-rooms [[x y] n]
   (let [t0 [[[1 1] (- x 2) (- y 2)]]]
     (loop [tier n
            defs [t0]]
@@ -49,12 +49,10 @@
         rect-fields (concat corridor-fields room-fields)]
     (distinct (apply concat rect-fields))))
 
-(defn wallmap
-  ([[x y]] (let [generate-col #(into [] (take % (repeat 0)))]
-             (into [] (take x (repeat (generate-col y))))))
-  ([[x y] tier-defs corridor-defs] (-> (wallmap [x y])
-                                       (apply-seq (open-fields tier-defs corridor-defs)
-                                                  (fn [m p] (assoc-in m p 1))))))
+(defn wallmap [size tier-defs corridor-defs]
+  (-> (rect-array size 0)
+      (apply-seq (open-fields tier-defs corridor-defs)
+                 (fn [m p] (assoc-in m p 1)))))
 
 (defn get-biome [lvlid]
   (get {1 :castle
@@ -96,19 +94,19 @@
 
 (defn generate-level [state lvl fromlvl]
   (set-seed! lvl)
-  (let [[x y] (get-size lvl)
+  (let [size (get-size lvl)
         biome (get-biome lvl)
 
-        tier-defs (bsp-rooms x y (get-tiers lvl))
+        tier-defs (bsp-rooms size (get-tiers lvl))
         corridor-defs (bsp-corridors tier-defs (get-corridorsize lvl))
-        open (wallmap [x y] tier-defs corridor-defs)
+        open (wallmap size tier-defs corridor-defs)
 
         entry-pos (midpoint (rand-coll (last tier-defs)))
         exit-pos (apply max-key (fn [pos] (man-dist pos entry-pos))
                           (map midpoint (last tier-defs)))]
     (-> state
         (merge {:level   lvl
-                :mapsize [x y]
+                :mapsize size
                 :open    open
                 :maphash (hash open)
                 :biome   biome})

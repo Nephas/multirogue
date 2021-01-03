@@ -16,7 +16,7 @@
 * [X] 2 player entities per playthrough
 * [X] Both player entities are always present in the world
 * [X] both entities have to be close to transit between areas
-* [ ] uncommanded entity will be present as draugr
+* [X] uncommanded entity will be present as draugr
 	* following other player
 	* new player can join into draugr body
 * [ ] killed player entity
@@ -26,9 +26,8 @@
 
 ## Sparse but Tactical Combat
 
-* [X] Realtime action point system
-	* players have action point pool
-	* replenishes small amount each tic
+* [X] turn based action point system
+	* players have common action point pool
 	* npcs will have simplified turn-based actions
 * [ ] AP can be spent to
 	* attack

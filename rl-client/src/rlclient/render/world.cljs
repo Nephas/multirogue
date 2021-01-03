@@ -5,6 +5,7 @@
             [rllib.selector :refer [get-entities-at]]
             [rllib.vector :refer [add]]
             [rlclient.network.session :as r]
+            [rlclient.render.fov :refer [in-fov? explored?]]
             [rlclient.graphics.gui.bar :as b]
             [rlclient.graphics.wall :as w]
             [rlclient.graphics.floor :as f]))
@@ -22,25 +23,29 @@
       (q/background 0)
       ;walls
       (doseq [[pos tile] (:tiles @w/wallmap)]
-        (c/at-mappos (sh/get-tile tile) pos))
+        (when (in-fov? pos)
+          (c/at-mappos (sh/get-tile tile) pos)))
 
       ;floors
       (doseq [[pos tile] (:tiles @f/floormap)]
-        (c/at-mappos (sh/get-tile tile) pos))
+        (when (in-fov? pos)
+          (c/at-mappos (sh/get-tile tile) pos)))
 
       ;sprites
       (doseq [[id tile] (:sprite state)]
-        (c/at-mappos (sh/get-tile tile)
-                     (get (:pos state) id)))
+        (let [pos (get-in state [:pos id])]
+          (when (in-fov? pos)
+            (c/at-mappos (sh/get-tile tile) pos))))
 
       ;animations
       (doseq [[id animation] (:animated state)]
-        (c/at-mappos (sh/get-animation animation (hash id))
-                     (get (:pos state) id)))
+        (let [pos (get-in state [:pos id])]
+          (when (in-fov? pos)
+            (c/at-mappos (sh/get-animation animation (hash id)) pos))))
 
       (c/at-mappos (sh/get-tile [11 12]) @c/cursor)
 
-      (q/fill 0)
+      (q/fill 0.1)
       (q/rect 0 0 160 800)
       (q/fill 1.0)
 
@@ -62,7 +67,7 @@
             ids (get-entities-at state @c/cursor)
             text (clojure.string/join "\n" (map #(get-text state %) ids))]
         (when-not (empty? ids)
-          (q/fill 0)
+          (q/fill 0.1)
           (q/rect x y 100 200)
           (q/fill 1.0)
           (q/text text x y 100 200)))))
