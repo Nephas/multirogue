@@ -8,6 +8,9 @@
 (def wallmap (atom {:maphash nil
                     :tiles   []}))
 
+(defn block-los? [pos]
+  (contains? (:tiles @wallmap) pos))
+
 (defn includes? [e arr]
   (some #(= e %) arr))
 
