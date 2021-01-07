@@ -4,7 +4,7 @@
     [rllib.vector :refer [man-dist sub add]]
     [rllib.rand :refer [set-seed! uniform rand-n rand-coll new-seed]]
     [rllib.state :refer [apply-seq apply-times]]
-    [rlserver.generate.npc :refer [generate-raven generate-skeleton]]
+    [rlserver.generate.npc :refer [generate-godi]]
     [rlserver.generate.level.castle :refer [generate-castle-level]]
     [rlserver.generate.level.ruin :refer [generate-ruin-level]]
     [rlserver.generate.level.frost :refer [generate-frost-level]]
@@ -120,4 +120,5 @@
         fields (vals (large-neighborhood (get-in state [:pos transitid])))]
     (-> state
         (generate-pc 0 "Hervor" (rand-coll fields))
-        (generate-pc 1 "Yrsa" (rand-coll fields)))))
+        (generate-pc 1 "Yrsa" (rand-coll fields))
+        (generate-godi (rand-coll fields)))))

@@ -14,7 +14,7 @@ A place - to find peace.
 Press [SPACE] to Continue"
 
                    1 "Press [R] to Restart"
-                   })
+                   2 "Press [R] to Restart"})
 
 (defn render-loadscreen! [screen]
   (let [[resx resy] c/MAPRES

@@ -46,7 +46,8 @@
   (let [origin (. (. js/document -location) -origin)]
     (do (print "fetching images")
         (swap! image assoc 0 (q/load-image (str origin "/img/image_0.png")))
-        (swap! image assoc 1 (q/load-image (str origin "/img/image_1.png"))))))
+        (swap! image assoc 1 (q/load-image (str origin "/img/image_1.png")))
+        (swap! image assoc 2 (q/load-image (str origin "/img/image_1.png"))))))
 
 (defn image-loaded [index]
   (and (some? (get @image index)) (quil.core/loaded? (get @image index))))

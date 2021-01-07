@@ -50,3 +50,4 @@
       (update :pap #(sub % [2 2]))
       (assoc-in [:animated pid] (+ pid 2))
       (assoc-in [:follow pid] (other pid))))
+

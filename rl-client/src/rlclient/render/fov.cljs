@@ -16,10 +16,11 @@
 
 (defn cast-fov [fovmap]
   (let [pos (get-in @remote-state [:pos (player-id)])]
-    (-> fovmap
+    (if (nil? pos) fovmap
+      (-> fovmap
         (memorize-fov)
         (assoc-in pos 1)
-        (cast-raymap PLAYER_FOV pos))))
+        (cast-raymap PLAYER_FOV pos)))))
 
 (defn update-player-fov []
   (do (swap! fovmap assoc :tic (:tic @remote-state))
@@ -29,8 +30,7 @@
   (reset! fovmap {:tic   (:tic @remote-state)
                   :level (:level @remote-state)
                   :fov   (-> (:mapsize @remote-state)
-                             (rect-array -1)
-                             (cast-fov))}))
+                             (rect-array -1))}))
 
 (defn update-fovmap []
   (when (and (some? @remote-state) (or (nil? (:fov @fovmap)) (not= (:level @fovmap) (:level @remote-state))))

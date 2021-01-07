@@ -40,9 +40,9 @@
   (loop [[pos & remaining] ray
          current fovmap]
     (cond (nil? pos) current
-          (block-los? pos) (light-up current pos)
+          (block-los? pos) (assoc-in current pos 1)
           true (recur remaining
-                      (assoc-in current pos 1)))))
+                      (light-up current pos)))))
 
 (defn cast-raymap [fovmap raymap origin]
   (time (loop [[ray & remaining] (offset raymap origin)

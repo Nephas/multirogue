@@ -17,6 +17,12 @@
 (defn log-header [gid pid]
   (str "[gid: " gid " - pid: " pid "]"))
 
+(defn new-game! [gid]
+  (do (l/preload-game gid)
+      (broadcast gid (serialize-full gid))
+      (l/initialize-game gid)
+      (broadcast gid (serialize-full gid))))
+
 (defn handle [msg channel gid pid]
   (do (println (log-header gid pid) msg)
       (cond (str/includes? msg "disconnect")
@@ -30,23 +36,19 @@
 
             (str/includes? msg "reset")
             (do (println "\t * reset game")
-                (l/preload-game gid)
-                (broadcast gid (serialize-full gid))
-                (l/initialize-game gid)
+                (new-game! gid)
                 (doseq [id (connected-players gid)]
                   (swap! game-store update gid player-join id))
-                (broadcast gid (serialize-full gid)))
+                (broadcast gid (serialize-diff gid)))
 
             (str/includes? msg "connect")
             (do (swap! channels assoc-in [gid pid] channel)
                 (println "\t * open channels:" (count (get @channels gid)))
                 (when (nil? (get @game-store gid))
-                  (l/preload-game gid)
-                  (broadcast gid (serialize-full gid))
-                  (l/initialize-game gid))
+                  (new-game! gid))
                 (swap! game-store update gid player-join pid)
                 (broadcast gid (str "connect player " pid))
-                (broadcast gid (serialize-full gid)))
+                (broadcast gid (serialize-diff gid)))
 
             (str/includes? msg "action")
             (let [action (read-string (last (str/split msg #"action")))]

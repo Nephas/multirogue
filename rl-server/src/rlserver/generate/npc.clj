@@ -10,6 +10,15 @@
                   :animated 8}
                  [:ai :block]))
 
+(defn generate-godi [state pos]
+  (create-entity state
+                 {:pos      pos
+                  :desc     "godi"
+                  :hp       [8 8]
+                  :dmg      1
+                  :animated 11}
+                 [:ai :block]))
+
 (defn generate-skeleton [state pos]
   (create-entity state
                  {:pos      pos
