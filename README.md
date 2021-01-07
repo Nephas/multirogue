@@ -39,14 +39,18 @@
 * [ ] NPC factions
 	* not all NPCs are hostile
 	* NPCs might be agressive towards each other
-* [ ] Prevenable combat via stealth system
+* [ ] Preventable combat via stealth system
 	* light-shadow system
 	* distraction actions
 	* invisibility items
 	
 ## Exploration
 
-* [ ] multiple Biomes
+* [x] multiple Biomes
+* [ ] level challenges - keys to progress to next level
+    * three keys distributed across level
+    * miniboss: steal or fight for key
+    * godi: sacrifice stats for key
 * [ ] killing is not rewarded - XP are gained for
 	* reaching a new area
 	* finding specific Items (runestones)
@@ -82,8 +86,8 @@
 
 ### Intro
 
->The World has ended - for how long you do not know. Life is a burden and Death a treasure. But True Death does not come easily in this place beyond time, where the living eat the dead, and the dead eat the living.
-
+>The World has ended - for how long you do not know. Life is a burden and Death a treasure. Yet True Death does not come easily in this place beyond time, where the living eat the dead, and the dead eat the living.
+>
 >But the lonely Godi has told you so often - there must be a place, where you can leave it behind. A place where the Raven will not find you, and drag your rotting body back into the eternal circle.
 A place - to find peace.
 
@@ -101,7 +105,12 @@ A place - to find peace.
 
 ### Goal
 
-[The players reach the Gates of Valhalla - the Raven cannot reach this place, so death will be final. Player choice, who kills whom.]
+>This is the place they told you about. The Raven is far away and will not find you when you exhale your last breath. 
+>You Close your eyes, the face of your beloved {other-player} in your mind and icy steel in your hand.
+>
+>One last thrust into your scarred body and a cold pain - the last pain you ever feel
+>
+>Valhalla awaits
 
 ## Levels
 
@@ -136,7 +145,7 @@ A place - to find peace.
 * **NPCs:**
 	- Snake
 	- Goblin
-	- Wolve
+	- Wolf
 	- Kraken
 	
 ### Pass to the Edge
