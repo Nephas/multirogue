@@ -2,6 +2,7 @@
   (:require [quil.core :as q :include-macros true]
             [rlclient.graphics.camera :refer [SIZE SCALE]]))
 
+;TODO add watches to slice images on return
 (def tilesheet (atom nil))
 (def animationsheet (atom nil))
 (def image (atom {}))

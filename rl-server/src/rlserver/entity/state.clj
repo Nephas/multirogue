@@ -2,6 +2,7 @@
   (:require [clojure.data.json :as json]
             [clojure.string :as s]))
 
+;TODO write validator to throw IllegalStateException
 (def game-store (atom {}))
 (def seq-store (atom 10))
 

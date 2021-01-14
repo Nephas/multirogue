@@ -3,7 +3,7 @@
     [cljs.reader :as reader]
     [rlclient.network.session :as r]))
 
-
+;TODO write validator to throw IllegalStateException
 (def remote-state (atom {}))
 
 (def socket (atom nil))
